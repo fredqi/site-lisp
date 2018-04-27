@@ -12,8 +12,8 @@
 ;;    Move the ess package to mathinit.el.
 ;;    Setting user-full-name with respect to machine and OS platform.
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2017-04-25 14:27:56(+0800) [by Fred Qi]
-;;     Update #: 970
+;; Last-Updated: 2018-04-27 23:23:22(+0800) [by Fred Qi]
+;;     Update #: 977
 ;; ----------------------------------------------------------------------
 ;;
 ;;
@@ -53,7 +53,7 @@
   (setq package-archives
 	'(("gnu" . "http://elpa.gnu.org/packages/")
 	  ;; ("orgmode" . "http://orgmode.org/elpa/")
-	  ;; ("marmalade" . "https://marmalade-repo.org/packages/")
+	  ("marmalade" . "http://marmalade-repo.org/packages/")
 	  ;;("elpy" . "http://jorgenschaefer.github.io/packages/")
 	  ("melpa" . "http://melpa.org/packages/"))))
 
@@ -143,8 +143,11 @@
 (setq kill-ring-max 200)
 (setq save-abbrevs nil)
 (setq default-major-mode 'text-mode)    ; set text-mode as the default major mode
-(setq default-buffer-file-coding-system 
-	  (if linux-p 'utf-8-unix 'utf-8-dos))
+(setq default-buffer-file-coding-system
+	  (cond
+	   (linux-p 'utf-8-unix)
+	   (darwin-p 'utf-8-mac)
+	   (winnt-p 'utf-8-dos)))
 
 (setq tramp-default-method "ssh")		; faster than default scp
 ;; (setq url-using-proxy t)
@@ -165,7 +168,7 @@
 ;; (setq calendar-week-start-day 1)		; use default value
 (setq calendar-mark-holidays-flag nil)
 
-(if linux-p
+(if (or linux-p darwin-p)
 	(setq x-select-enable-clipboard t))
 
 ;; ----------------------------------------------------------------------
@@ -173,7 +176,7 @@
 ;; ----------------------------------------------------------------------
 (if (>= emacs-major-version 23)
     (progn 
-      (if linux-p
+      (if (or linux-p darwin-p)
 		  (set-language-environment 'utf-8))
 	  (if winnt-p
 		  (progn
@@ -220,8 +223,8 @@
 
 ;; Settings for ispell
 (setq ispell-program-name local-ispell-pathexe)
-(if winnt-p (setenv "DICTIONARY" local-ispell-dict)
-  (ispell-change-dictionary "american" t))
+(if linux-p (ispell-change-dictionary "american" t)
+  (setenv "DICTIONARY" local-ispell-dict))
 
 ;; Setup ido mode
 (ido-mode 'buffer)
