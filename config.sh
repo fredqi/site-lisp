@@ -2,7 +2,7 @@
 
 sudo apt install -qq -y ttf-bitstream-vera
 
-PKGS="yaml-mode htmlize yasnippet cython-mode auctex android-mode header2"
+PKGS="yaml-mode htmlize yasnippet company company-tabnine cython-mode auctex android-mode"
 
 emacs -Q --batch --eval "(progn (require 'package)\
   (setq package--init-file-ensured t)\
