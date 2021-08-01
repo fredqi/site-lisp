@@ -9,8 +9,8 @@
 ;; ----------------------------------------------------------------------
 ;;; CHANGE LOG
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2017-03-11 16:55:05(+0800) [by Fred Qi]
-;;     Update #: 47
+;; Last-Updated: 2020-03-25 12:20:07(+0800) [by Fred Qi]
+;;     Update #: 48
 ;; ----------------------------------------------------------------------
 
 ;; (require 'python)
@@ -33,9 +33,9 @@
   (setq comment-start "# ")
   (setq python-python-command "python")
   (setq python-command python-python-command)
-  (fred-auto-header-hook)
-  (require 'sphinx-doc)
-  (sphinx-doc-mode t))
+  (fred-auto-header-hook))
+  ;; (require 'sphinx-doc)
+  ;; (sphinx-doc-mode t))
 
 (setq python-python-command local-python-path)
 

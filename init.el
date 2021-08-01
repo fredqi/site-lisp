@@ -12,8 +12,8 @@
 ;; 2006-03-23 23:06:51(+0800)    Fred Qi@mobile  
 ;;    Added the local settings for laptop, lab, and dorm of Windows NT.
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2018-04-27 23:29:11(+0800) [by Fred Qi]
-;;     Update #: 490
+;; Last-Updated: 2021-08-01 11:31:27(+0800) [by Fred Qi]
+;;     Update #: 515
 ;; ----------------------------------------------------------------------
 
 ;; ----------------------------------------------------------------------
@@ -135,8 +135,8 @@
 
 (defconst local-font-chn
   (if linux-p
-	  "-*-YouYuan-medium-r-normal-*-24-*-*-*-c-*-iso10646-1"
-	"-outline-新宋体-normal-r-normal-*-20-*-120-120-c-*-iso10646-1")
+	  "-*-Noto Sans CJK SC-medium-r-normal-*-28-*-*-*-c-*-iso10646-1"
+	"-outline-Noto Serif CJK SC-normal-r-normal-*-20-*-120-120-c-*-iso10646-1")
   "The string specifying the font used for displaying Chinese simplified characters.")
 
 (setq safe-local-variable-values
@@ -164,10 +164,10 @@
 (load "orginit.el" nil t t)     ;; Org mode settings
 ;; (load "museinit.el" nil t t)	;; load muse packages
 
-;; yasnippet configurations
-(require 'yasnippet)
-(yas-global-mode t)
-(yas-reload-all)
+;; ;; yasnippet configurations
+;; (require 'yasnippet)
+;; (yas-global-mode t)
+;; (yas-reload-all)
 
 ;; ----------------------------------------------------------------------
 ;; SOME GOOD LINKS FOR EMACS SOURCES

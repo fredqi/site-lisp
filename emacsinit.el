@@ -12,8 +12,8 @@
 ;;    Move the ess package to mathinit.el.
 ;;    Setting user-full-name with respect to machine and OS platform.
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2018-04-27 23:23:22(+0800) [by Fred Qi]
-;;     Update #: 977
+;; Last-Updated: 2020-03-25 14:57:27(+0800) [by Fred Qi]
+;;     Update #: 993
 ;; ----------------------------------------------------------------------
 ;;
 ;;
@@ -74,6 +74,19 @@
 ;; (autoload 'doscmd-mode "doscmd-mode")
 ;; (add-to-list 'auto-mode-alist '("\\.bat$" . doscmd-mode))
 ;; (add-to-list 'auto-mode-alist '("\\.cmd$" . doscmd-mode))
+
+(require 'company)
+(require 'company-tabnine)
+
+;; Company configurations
+(add-to-list 'company-backends #'company-tabnine)
+(add-hook 'after-init-hook 'global-company-mode)
+
+;; Trigger completion immediately.
+(setq company-idle-delay 0)
+
+;; Number the candidates (use M-1, M-2 etc to select completions).
+(setq company-show-numbers t)
 
 ;; ----------------------------------------------------------------------
 ;; Custom the basic functionalities of EMACS
@@ -136,12 +149,12 @@
 (auto-image-file-mode t)				; show images (png,jpeg,xpm,tiff)
 (mouse-avoidance-mode 'animate)			; move mouse cursor when editing to
 
-(setq abbrev-mode t)                    ; turn on abbrev-mode
+;; (setq abbrev-mode t)                    ; turn on abbrev-mode
 (setq auto-fill-mode t)                 ; turn on auto-fill-mode
 (setq default-fill-column 80)           ; set column width 
 (setq default-tab-width 4)              ; default tab width
 (setq kill-ring-max 200)
-(setq save-abbrevs nil)
+;; (setq save-abbrevs nil)
 (setq default-major-mode 'text-mode)    ; set text-mode as the default major mode
 (setq default-buffer-file-coding-system
 	  (cond
