@@ -12,20 +12,14 @@
 ;; 2006-03-23 23:06:51(+0800)    Fred Qi@mobile  
 ;;    Added the local settings for laptop, lab, and dorm of Windows NT.
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2021-08-01 11:31:27(+0800) [by Fred Qi]
-;;     Update #: 515
+;; Last-Updated: 2022-01-18 00:13:43(+0800) [by Fred Qi]
+;;     Update #: 516
 ;; ----------------------------------------------------------------------
 
 ;; ----------------------------------------------------------------------
 ;; Detect the environment
 ;; ----------------------------------------------------------------------
 
-
-;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
-(package-initialize)
 
 (defconst winnt-p
   (eq system-type 'windows-nt)
