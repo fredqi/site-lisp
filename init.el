@@ -12,8 +12,8 @@
 ;; 2006-03-23 23:06:51(+0800)    Fred Qi@mobile  
 ;;    Added the local settings for laptop, lab, and dorm of Windows NT.
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2022-01-18 00:13:43(+0800) [by Fred Qi]
-;;     Update #: 516
+;; Last-Updated: 2022-01-18 16:16:45(+0800) [by Fred Qi]
+;;     Update #: 518
 ;; ----------------------------------------------------------------------
 
 ;; ----------------------------------------------------------------------
@@ -47,9 +47,9 @@
 
 (server-start)
 (add-hook 'kill-emacs-hook
-		  (lambda()
-			(if (file-exists-p "~/.emacs.d/server/server")
-				(delete-file "~/.emacs.d/server/server"))))
+	  (lambda()
+	    (if (file-exists-p "~/.emacs.d/server/server")
+                (delete-file "~/.emacs.d/server/server"))))
 
 (add-to-list 'load-path "~/.emacs.d/site-lisp")
 
@@ -65,26 +65,26 @@
    (darwin-p "en_US"))
   "The dictionary used by ispell.")
 
-(defconst local-matlab-root 
-  (cond
-   (winnt-p	"C:/MATLAB")
-   (linux-p	"/usr/local/matlab"))
-  "The path of the MATLAB lisp package.")
+;; (defconst local-matlab-root 
+;;   (cond
+;;    (winnt-p  "C:/MATLAB")
+;;    (linux-p  "/usr/local/matlab"))
+;;   "The path of the MATLAB lisp package.")
 
 (defconst local-asymptote-path 
   (cond
    (winnt-p		"C:/LaTeX/Asymptote/"))
   "The path of the asymptote program.")
 
-(defconst local-tex-dirs
-  (cond
-   (winnt-p '("C:/LaTeX/MiKTeX27")))
-  "The directories containing tex macros.")
+;; (defconst local-tex-dirs
+;;   (cond
+;;    (winnt-p '("C:/LaTeX/MiKTeX27")))
+;;   "The directories containing tex macros.")
 
-(defconst local-inno-path
-  (cond
-   (winnt-p "C:/Develop/Inno/"))
-  "The directory inno setup installed to.")
+;; (defconst local-inno-path
+;;   (cond
+;;    (winnt-p "C:/Develop/Inno/"))
+;;   "The directory inno setup installed to.")
 
 (defconst local-python-path
   (cond
@@ -134,27 +134,27 @@
   "The string specifying the font used for displaying Chinese simplified characters.")
 
 (setq safe-local-variable-values
-	  (append '((TeX-master . t)
-				(encoding . us-ascii)
-				(encoding . us-ascii-unix)
-				(encoding . us-ascii-dos)
-				(encoding . us-ascii-mac)
-				(encoding . utf-8)
-				(encoding . utf-8-unix)
-				(encoding . utf-8-dos)
-				(encoding . utf-8-mac)
-				(encoding . chinese-gbk)
-				(encoding . chinese-gbk-unix)
-				(encoding . chinese-gbk-dos)
-				(encoding . chinese-gbk-mac)
-				(default-fill-column . 68 ))
-			  safe-local-variable-values ))
+      (append '((TeX-master . t)
+		(encoding . us-ascii)
+		(encoding . us-ascii-unix)
+		(encoding . us-ascii-dos)
+		(encoding . us-ascii-mac)
+		(encoding . utf-8)
+		(encoding . utf-8-unix)
+		(encoding . utf-8-dos)
+		(encoding . utf-8-mac)
+		(encoding . chinese-gbk)
+		(encoding . chinese-gbk-unix)
+		(encoding . chinese-gbk-dos)
+		(encoding . chinese-gbk-mac)
+		(default-fill-column . 68 ))
+	      safe-local-variable-values ))
 
 (load "emacsinit.el" nil t t)	;; emacs miscellaneous settings
 (load "texinit.el" nil t t)		;; tex related settings
 (load "cppinit.el" nil t t)		;; C/C++ related settings
 (load "pyinit.el" nil t t)		;; Python related settings
-(load "mathinit.el" nil t t)    ;; Math software related settings
+;; (load "mathinit.el" nil t t)    ;; Math software related settings
 (load "orginit.el" nil t t)     ;; Org mode settings
 ;; (load "museinit.el" nil t t)	;; load muse packages
 
@@ -177,3 +177,16 @@
 ;; ----------------------------------------------------------------------
 ;;; END OF FILE 
 ;; ----------------------------------------------------------------------
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(yasnippet markdown-mode julia-mode htmlize dockerfile-mode docker-compose-mode docker cython-mode csv-mode company-tabnine auctex android-mode)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

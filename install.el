@@ -4,8 +4,8 @@
 ;; Author: Fred Qi
 ;; Created: 2022-01-17 23:15:18(+0800)
 ;;
-;; Last-Updated: 2022-01-18 00:04:44(+0800) [by Fred Qi]
-;;     Update #: 81
+;; Last-Updated: 2022-01-18 00:24:00(+0800) [by Fred Qi]
+;;     Update #: 83
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Commentary:
@@ -22,12 +22,14 @@
 (setq pkgs '(htmlize
 	     yasnippet
 	     company company-tabnine
-	     auctex
+	     auctex cdlatex
 	     docker docker-compose-mode dockerfile-mode
 	     yaml-mode
 	     cython-mode
 	     csv-mode
 	     markdown-mode
+	     django-mode
+	     matlab-mode
 	     julia-mode
 	     android-mode))
 
