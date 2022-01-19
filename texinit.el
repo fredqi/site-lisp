@@ -9,8 +9,8 @@
 ;; ----------------------------------------------------------------------
 ;;; CHANGE LOG
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2021-08-01 11:32:16(+0800) [by Fred Qi]
-;;     Update #: 251
+;; Last-Updated: 2022-01-19 18:48:37(+0800) [by Fred Qi]
+;;     Update #: 298
 ;; ----------------------------------------------------------------------
 ;;; COMMENTARY
 ;; ----------------------------------------------------------------------
@@ -20,14 +20,45 @@
 ;; 
 ;; ----------------------------------------------------------------------
 
-;; Load the AUCTeX package
-(load "auctex.el" nil t t)
-(load "preview.el" nil t t)
+(defun fred-latex-hook ()
+  (use-package cdlatex :ensure t)
+  (use-package company-reftex :ensure t)
+  (fred-auto-header-hook)
+  (TeX-PDF-mode t)
+  (TeX-fold-mode)
+  (outline-minor-mode)
+  (flyspell-mode)
+  (turn-on-reftex)
+  (turn-on-visual-line-mode)
+  (LaTeX-math-mode)
+  (turn-on-cdlatex)
+  (TeX-source-correlate-mode)
+  (make-local-variable 'company-backends)
+  (setq company-backends
+	'((company-capf
+	   company-tabnine
+	   company-reftex-labels
+           company-reftex-citations
+           company-yasnippet))))
 
-(require 'tex-site)
+;; Enable LaTeX
+(use-package tex-site
+  :ensure auctex
+  :mode
+  ("\\.tex\\'" . LaTeX-mode)
+  ("\\.ltx\\'" . LaTeX-mode)
+  :config
+  (setq reftex-plug-into-AUCTeX t
+	TeX-parse-self t
+	TeX-auto-save t
+	TeX-master t
+	TeX-electric-sub-and-superscript t
+	TeX-engine `xetex
+	bib-cite-use-reftex-view-crossref t)
+  (dolist (hook '(latex-mode-hook LaTeX-mode-hook))
+    (add-hook hook #'fred-latex-hook)))
 
 (autoload 'bst-mode "bst-mode" "BibTeX-style major mode." t)
-
 (autoload 'asy-mode "asy-mode.el" "Asymptote major mode." t)
 (autoload 'lasy-mode "asy-mode.el" "hybrid Asymptote/Latex major mode." t)
 (autoload 'asy-insinuate-latex "asy-mode.el" "Asymptote insinuate LaTeX." t)
@@ -36,26 +67,11 @@
 	  (lambda ()
 	    (c-set-style "standard")))
 
-;; (autoload 'cdlatex-mode "cdlatex" "CDLaTeX Mode" t)
-;; (autoload 'turn-on-cdlatex "cdlatex" "CDLaTeX Mode" nil)
+;; ;; preview-latex settings
+;; (setq preview-image-type 'pnm)
+;; (setq preview-auto-cache-preamble t)
+;; ;;(setq preview-transparent-color "blue")
 
-;; AUCTeX Configurations
-(setq TeX-parse-self t)
-(setq TeX-auto-save t)
-(setq TeX-master t)
-(setq TeX-electric-sub-and-superscript t)
-(setq TeX-engine `xetex)
-
-;; preview-latex settings
-(setq preview-image-type 'pnm)
-(setq preview-auto-cache-preamble t)
-;;(setq preview-transparent-color "blue")
-
-;; RefTeX custom
-(setq reftex-plug-into-AUCTeX t)
-(setq bib-cite-use-reftex-view-crossref t)
-(setq reftex-bibpath-environment-variables
-	  '("~/texmf/bibtex/bib/fred/"))
 ;; ;; Biblatex command
 ;; (setq reftex-bibliography-commands
 ;; 	  '("bibliography" "nobibliography"
@@ -64,23 +80,8 @@
 ;; (require 'zotelo)
 ;; (add-hook 'TeX-mode-hook 'zotelo-minor-mode)
 
-(defun fred-LaTeX-hook()
-  (fred-auto-header-hook)
-  (turn-on-visual-line-mode)
-  (setq TeX-engine `xetex)
-  (TeX-PDF-mode)
-  (TeX-fold-mode)
-  (outline-minor-mode)
-  (LaTeX-math-mode)
-  (flyspell-mode)
-  (turn-on-reftex)
-  (TeX-source-correlate-mode))
-
-;; load minor modes when opening tex files
-(add-hook 'LaTeX-mode-hook 'fred-LaTeX-hook)
-
 ;; SyncTeX support with Evince
-(require 'dbus)
+(use-package dbus)
 
 (defun un-urlify (fname-or-url)
   "A trivial function that replaces a prefix of file:/// with just /."
@@ -122,10 +123,6 @@
 
 (setq asy-command-location local-asymptote-path)
 (add-hook 'asy-mode-hook 'fred-auto-header-hook)
-
-;;setup key-map
-(global-set-key [f10]	'tex-source-specials-mode)
-(global-set-key [f11]	'latex-math-mode)
 
 ;; ----------------------------------------------------------------------
 ;;; END OF FILE 
