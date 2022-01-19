@@ -9,8 +9,8 @@
 ;; ----------------------------------------------------------------------
 ;;; CHANGE LOG
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2020-03-25 12:20:07(+0800) [by Fred Qi]
-;;     Update #: 48
+;; Last-Updated: 2022-01-19 15:23:42(+0800) [by Fred Qi]
+;;     Update #: 50
 ;; ----------------------------------------------------------------------
 
 ;; (require 'python)
@@ -43,8 +43,8 @@
 
 ;; (require 'ein)
 
-(require 'yaml-mode)
-(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
+(use-package yaml-mode
+  :mode ("\\.ya?ml\\'" . yaml-mode))
 
 (require 'android-mode)
 (setq android-mode-sdk-dir "~/android/sdk")

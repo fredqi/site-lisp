@@ -12,8 +12,8 @@
 ;; 2006-04-24 00:05:24(+0800)    Fred Qi@lab
 ;;    Added a elisp function to recursively generating etags.
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2021-08-01 11:29:32(+0800) [by Fred Qi]
-;;     Update #: 497
+;; Last-Updated: 2022-01-19 15:28:32(+0800) [by Fred Qi]
+;;     Update #: 499
 ;; ----------------------------------------------------------------------
 
 ;; ----------------------------------------------------------------------
@@ -43,7 +43,10 @@
 (require 'tempo)
 (require 'toggle-source)
 
-(autoload 'cmake-mode "cmake-mode" "CMake major Mode" t)
+(use-package cmake-mode
+  :mode (("\\.cmake\\'" . cmake-mode)
+         ("CMakeLists.txt" . cmake-mode)))
+;; (autoload 'cmake-mode "cmake-mode" "CMake major Mode" t)
 ;; (autoload 'iss-mode "iss-mode" "Innosetup Script Mode" t)
 ;; (autoload 'ini-mode "ini-mode" "Major Mode for editing ini files" t)
 ;; (autoload 'ned-mode "ned-mode" "Major Mode for editing Ned files" t)

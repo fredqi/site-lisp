@@ -12,8 +12,8 @@
 ;;    Move the ess package to mathinit.el.
 ;;    Setting user-full-name with respect to machine and OS platform.
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2020-03-25 14:57:27(+0800) [by Fred Qi]
-;;     Update #: 993
+;; Last-Updated: 2022-01-19 15:20:55(+0800) [by Fred Qi]
+;;     Update #: 1022
 ;; ----------------------------------------------------------------------
 ;;
 ;;
@@ -42,21 +42,6 @@
 ; Rename files editing their names in dired buffers.
 (autoload 'wdired-change-to-wdired-mode "wdired")
 
-;; basic initialization, (require) non-ELPA packages, etc.
-(setq package-enable-at-startup nil)
-;; ----------------------------------------------------------------------
-;; Setting up the package manager.
-;; ----------------------------------------------------------------------
-(when (>= emacs-major-version 24)
-  (require 'package)
-  (package-initialize)
-  (setq package-archives
-	'(("gnu" . "http://elpa.gnu.org/packages/")
-	  ;; ("orgmode" . "http://orgmode.org/elpa/")
-	  ("marmalade" . "http://marmalade-repo.org/packages/")
-	  ;;("elpy" . "http://jorgenschaefer.github.io/packages/")
-	  ("melpa" . "http://melpa.org/packages/"))))
-
 (require 'htmlize)      ; Convert buffer text and decorations to HTML.
 (require 'header2)      ; Support for creation and update of file headers.
 ;; (require 'psvn)         ; Subversion interface.
@@ -75,18 +60,31 @@
 ;; (add-to-list 'auto-mode-alist '("\\.bat$" . doscmd-mode))
 ;; (add-to-list 'auto-mode-alist '("\\.cmd$" . doscmd-mode))
 
-(require 'company)
-(require 'company-tabnine)
+(require 'use-package)
+
+(use-package company
+  :bind (:map company-active-map
+         ("C-n" . company-select-next)
+         ("C-p" . company-select-previous))
+  :config
+  ;; Trigger completion immediately.
+  (setq company-idle-delay 0)
+  ;; Number candidates (use M-1, M-2 etc to select completions).
+  (setq company-show-numbers t)
+  (global-company-mode t))
+
+(use-package company-tabnine :ensure t)
 
 ;; Company configurations
 (add-to-list 'company-backends #'company-tabnine)
-(add-hook 'after-init-hook 'global-company-mode)
 
-;; Trigger completion immediately.
-(setq company-idle-delay 0)
-
-;; Number the candidates (use M-1, M-2 etc to select completions).
-(setq company-show-numbers t)
+;; yasnippet configurations
+(use-package yasnippet
+  :demand t
+  :mode ("\\.yasnippet\\'" . snippet-mode)
+  :config
+  (add-to-list 'yas-snippet-dirs "$HOME/.emacs.d/snippets")
+  (yas-global-mode t))
 
 ;; ----------------------------------------------------------------------
 ;; Custom the basic functionalities of EMACS

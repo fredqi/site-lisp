@@ -12,14 +12,17 @@
 ;; 2006-03-23 23:06:51(+0800)    Fred Qi@mobile  
 ;;    Added the local settings for laptop, lab, and dorm of Windows NT.
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2022-01-18 16:16:45(+0800) [by Fred Qi]
-;;     Update #: 518
+;; Last-Updated: 2022-01-19 15:19:23(+0800) [by Fred Qi]
+;;     Update #: 537
 ;; ----------------------------------------------------------------------
 
 ;; ----------------------------------------------------------------------
 ;; Detect the environment
 ;; ----------------------------------------------------------------------
 
+;; Do not use `init.el` for `custom-*` code - use `custom-file.el`.
+(setq custom-file "~/.emacs.d/custom-file.el")
+(load-file custom-file)
 
 (defconst winnt-p
   (eq system-type 'windows-nt)
@@ -150,18 +153,19 @@
 		(default-fill-column . 68 ))
 	      safe-local-variable-values ))
 
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+;; (load "install.el" nil t t)     ;; install packages
+
 (load "emacsinit.el" nil t t)	;; emacs miscellaneous settings
-(load "texinit.el" nil t t)		;; tex related settings
-(load "cppinit.el" nil t t)		;; C/C++ related settings
-(load "pyinit.el" nil t t)		;; Python related settings
+(load "texinit.el" nil t t)	;; tex related settings
+(load "cppinit.el" nil t t)	;; C/C++ related settings
+(load "pyinit.el" nil t t)	;; Python related settings
 ;; (load "mathinit.el" nil t t)    ;; Math software related settings
 (load "orginit.el" nil t t)     ;; Org mode settings
 ;; (load "museinit.el" nil t t)	;; load muse packages
-
-;; ;; yasnippet configurations
-;; (require 'yasnippet)
-;; (yas-global-mode t)
-;; (yas-reload-all)
 
 ;; ----------------------------------------------------------------------
 ;; SOME GOOD LINKS FOR EMACS SOURCES
@@ -174,19 +178,8 @@
 ;; http://www.gnusoftware.com/WebRing/
 ;; http://www.splode.com/users/friedman/software/emacs-lisp/
 ;;
+;; Reference:
+;; https://medium.com/helpshift-engineering/configuring-emacs-from-scratch-use-package-c30382297877
 ;; ----------------------------------------------------------------------
 ;;; END OF FILE 
 ;; ----------------------------------------------------------------------
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(yasnippet markdown-mode julia-mode htmlize dockerfile-mode docker-compose-mode docker cython-mode csv-mode company-tabnine auctex android-mode)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
