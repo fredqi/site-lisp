@@ -4,8 +4,8 @@
 ;; Author: Fred Qi
 ;; Created: 2022-01-17 23:15:18(+0800)
 ;;
-;; Last-Updated: 2022-01-19 14:11:03(+0800) [by Fred Qi]
-;;     Update #: 93
+;; Last-Updated: 2022-01-23 20:59:02(+0800) [by Fred Qi]
+;;     Update #: 105
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Commentary:
@@ -36,18 +36,14 @@
 	htmlize
 	yasnippet
 	flycheck
-	company company-tabnine
-	;; lsp-mode lsp-treemacs lsp-jedi
-	;; which-key
-	;; dap-mode
+	company company-tabnine company-reftex
 	auctex cdlatex
 	docker docker-compose-mode dockerfile-mode
-	yaml-mode
+	cmake-mode cmake-ide
 	go-mode
-	cython-mode
-	csv-mode
+	cython-mode django-mode toml-mode
 	markdown-mode
-	django-mode
+	csv-mode yaml-mode
 	matlab-mode
 	julia-mode
 	android-mode))

@@ -12,8 +12,8 @@
 ;; 2006-03-23 23:06:51(+0800)    Fred Qi@mobile  
 ;;    Added the local settings for laptop, lab, and dorm of Windows NT.
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2022-01-19 15:19:23(+0800) [by Fred Qi]
-;;     Update #: 537
+;; Last-Updated: 2022-01-19 16:22:18(+0800) [by Fred Qi]
+;;     Update #: 538
 ;; ----------------------------------------------------------------------
 
 ;; ----------------------------------------------------------------------
@@ -157,8 +157,7 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
-;; (load "install.el" nil t t)     ;; install packages
-
+(load "install.el" nil t t)     ;; install packages
 (load "emacsinit.el" nil t t)	;; emacs miscellaneous settings
 (load "texinit.el" nil t t)	;; tex related settings
 (load "cppinit.el" nil t t)	;; C/C++ related settings

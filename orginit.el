@@ -8,24 +8,24 @@
 ;; 
 ;; ----------------------------------------------------------------------
 ;;; CHANGE LOG
+;;; References:
+;;  - https://blog.sumtypeofway.com/posts/emacs-config.html
+;;  - https://jamiecollinson.com/blog/my-emacs-config/
+;;  - https://ianyepan.github.io/posts/setting-up-use-package/
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2017-04-26 19:53:49(+0800) [by Fred Qi]
-;;     Update #: 562
+;; Last-Updated: 2022-01-23 22:07:12(+0800) [by Fred Qi]
+;;     Update #: 574
 ;; ----------------------------------------------------------------------
 
-;; ;; el-pocket
-;; (require 'el-pocket)
-;; (el-pocket-load-auth)
+;;; Code:
 
-(autoload 'markdown-mode "markdown-mode"
-  "Major mode for editing Markdown files" t)
-(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-
-(autoload 'gfm-mode "markdown-mode"
-  "Major mode for editing GitHub Flavored Markdown files" t)
-(add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
-
+(use-package markdown-mode
+  :bind
+  (("C-c C-s a" . markdown-table-align))
+  :mode
+  ("\\.markdown\\'" . markdown-mode)
+  ("\\.md\\'" . markdown-mode)
+  ("README\\.md$" . gfm-mode))
 
 ;; Org-mode settings
 ;; (setq debug-on-error t)

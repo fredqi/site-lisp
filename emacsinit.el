@@ -12,8 +12,8 @@
 ;;    Move the ess package to mathinit.el.
 ;;    Setting user-full-name with respect to machine and OS platform.
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2022-01-19 15:20:55(+0800) [by Fred Qi]
-;;     Update #: 1022
+;; Last-Updated: 2022-01-23 21:08:20(+0800) [by Fred Qi]
+;;     Update #: 1037
 ;; ----------------------------------------------------------------------
 ;;
 ;;
@@ -80,11 +80,22 @@
 
 ;; yasnippet configurations
 (use-package yasnippet
+  :defer 3		       ; takes a while to load, so do it async
   :demand t
   :mode ("\\.yasnippet\\'" . snippet-mode)
   :config
-  (add-to-list 'yas-snippet-dirs "$HOME/.emacs.d/snippets")
-  (yas-global-mode t))
+  (add-to-list 'yas-snippet-dirs "~/.emacs.d/snippets")
+  (yas-global-mode)
+  :custom
+  (yas-prompt-functions '(yas-completing-prompt)))
+
+(use-package docker
+  :ensure t
+  :bind ("C-c d" . docker))
+
+(use-package dockerfile-mode)
+(use-package yaml-mode)
+(use-package toml-mode)
 
 ;; ----------------------------------------------------------------------
 ;; Custom the basic functionalities of EMACS
