@@ -12,8 +12,8 @@
 ;;    Move the ess package to mathinit.el.
 ;;    Setting user-full-name with respect to machine and OS platform.
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2022-01-23 21:08:20(+0800) [by Fred Qi]
-;;     Update #: 1037
+;; Last-Updated: 2022-09-22 18:49:52(+0800) [by Fred Qi]
+;;     Update #: 1046
 ;; ----------------------------------------------------------------------
 ;;
 ;;
@@ -159,11 +159,11 @@
 (mouse-avoidance-mode 'animate)			; move mouse cursor when editing to
 
 ;; (setq abbrev-mode t)                    ; turn on abbrev-mode
-(setq auto-fill-mode t)                 ; turn on auto-fill-mode
+;; (setq save-abbrevs nil)
+(setq auto-fill-mode nil)		; turn on auto-fill-mode
 (setq default-fill-column 80)           ; set column width 
 (setq default-tab-width 4)              ; default tab width
 (setq kill-ring-max 200)
-;; (setq save-abbrevs nil)
 (setq default-major-mode 'text-mode)    ; set text-mode as the default major mode
 (setq default-buffer-file-coding-system
 	  (cond
@@ -306,7 +306,8 @@
 
 (defun fred-text-mode-hook ()
   "Fred's text mode hook."
-  (turn-on-auto-fill)
+  ;; (turn-on-auto-fill)
+  (turn-on-visual-line-mode)
   (outline-minor-mode 1))
 
 (defun fred-sh-mode-hook ()
@@ -393,10 +394,10 @@
 (global-set-key [S-f3] 'query-replace-regexp)
 (global-set-key [S-f4] 'kill-buffer)
 (global-set-key [f5]   'revert-buffer)
-(global-set-key [f6]   'show-entry)
-(global-set-key [S-f6] 'show-all)
-(global-set-key [f7]   'hide-entry)
-(global-set-key [S-f7] 'hide-body)
+(global-set-key [f6]   'outline-show-entry)
+(global-set-key [S-f6] 'outline-show-all)
+(global-set-key [f7]   'outline-hide-entry)
+(global-set-key [S-f7] 'outline-hide-body)
 (global-set-key [f9]   'calendar)
 (global-set-key [f12]  'auto-fill-mode)
 

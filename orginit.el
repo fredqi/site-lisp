@@ -13,11 +13,18 @@
 ;;  - https://jamiecollinson.com/blog/my-emacs-config/
 ;;  - https://ianyepan.github.io/posts/setting-up-use-package/
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2022-01-23 22:07:12(+0800) [by Fred Qi]
-;;     Update #: 574
+;; Last-Updated: 2022-09-26 19:34:14(+0800) [by Fred Qi]
+;;     Update #: 917
 ;; ----------------------------------------------------------------------
 
 ;;; Code:
+
+;; Org-mode settings
+(require 'org)
+(require 'org-pomodoro)
+(require 'ox-beamer)
+;; (use-package ox-hugo :ensure t :pin melpa :after ox)
+(require 'ox-hugo)
 
 (use-package markdown-mode
   :bind
@@ -27,88 +34,145 @@
   ("\\.md\\'" . markdown-mode)
   ("README\\.md$" . gfm-mode))
 
-;; Org-mode settings
-;; (setq debug-on-error t)
-(require 'org)
-;; (require 'org-exp)
-(require 'ox-latex)
-(require 'ox-beamer)
-;; (require 'ox-reveal)
-;; (require 'ox-gfm)
+(eval-after-load "org"
+    (progn
+      (org-babel-do-load-languages
+       'org-babel-load-languages
+       '((python . t)
+	 (shell . t)
+	 (emacs-lisp . t)
+	 (gnuplot . t)
+	 (dot . t)))
+      (setq org-confirm-babel-evaluate nil)
+      (conda-env-activate "base")
+      (setq org-babel-python-command "python3")))
 
+(setq org-agenda-custom-commands
+      '(("r" "Research tasks"
+         ((agenda "") (tags "read") (tags "write") (tags "code") (tags "review")))
+	("l" "Life matters"
+         ((todo "REFR")))))
+
+;; GTD and agenda
+(setq org-log-done 'time)
+(setq org-agenda-start-on-weekday 0)
+(setq org-clock-persist 'history)
+(org-clock-persistence-insinuate)
+(setq org-agenda-dim-blocked-tasks t)	; Dim blocked tasks
+(setq org-agenda-compact-blocks t)	; Compact the block agenda view
+
+(setq org-todo-keywords
+      '((sequence "TODO(t)" "STARTED(s!)"
+		  "|" "DONE(d!/!)")
+	(sequence "REFR(Q!)" "DELEG(q!)" "SDAY(S!)"
+		  "|" "DONE(d!/!)" "EXPIRED(E@)" "REJECTED(R@)" "CANCELLED(c@/!)")))
+;; (sequence "WAIT(w@/!)" "SDAY(S!)"
+;; 		"OPEN(O@)" "|" "CANCELLED(c@/!)" "PHONE")
+;; (sequence "DELEG(q!)" "|"
+;; 		"APPROVED(A@)" "EXPIRED(E@)" "REJECTED(R@)"))))
+
+(setq org-todo-keyword-faces
+      '(("TODO" :foreground "red" :weight bold)
+	("STARTED" :foreground "cyan" :weight bold)
+ 	("DONE" :foreground "forest green" :weight bold)
+ 	;; ("WAIT" :foreground "orange" :weight bold)
+	;; ("SDAY" :foreground "magenta" :weight bold)
+	;; ("QUOTE" :foreground "red" :weight bold)
+	;; ("PHONE" :foreground "forest green" :weight bold)
+	;; ("APPROVED" :foreground "forest green" :weight bold)
+	("REFR" :foreground "magenta" :weight bold)
+	("DELEG" :foreground "cyan" :weight bold)
+ 	("CANCELLED" :foreground "forest green" :weight bold)
+	("EXPIRED" :foreground "forest green" :weight bold)
+	("REJECTED" :foreground "forest green" :weight bold)))
+ 
+(setq org-todo-state-tags-triggers
+      '(("CANCELLED" ("CANCELLED" . t))
+        ("WAIT" ("WAIT" . t) ("NEXT"))
+        ("SDAY" ("WAIT" . t))
+        (done ("NEXT") ("WAIT"))
+        ("TODO" ("WAIT") ("CANCELLED") ("NEXT"))
+        ("STARTED" ("WAIT"))
+        ("DONE" ("WAIT") ("CANCELLED") ("NEXT"))))
+
+(setq org-capture-templates
+      '(("r" "Reading task" entry
+	 (file+olp "research.org" "General Research" "Reading list")
+	 "*** TODO %^{Description}%? :read:"
+	 :immediate-finish t :jump-to-captured t)
+	("w" "Writing task" entry
+	 (file+olp "research.org" "General Research" "Writing list")
+	 "*** TODO %^{Description}%? :write:"
+	 :immediate-finish t :jump-to-captured t)
+	("R" "Review invitation" entry
+	 (file+olp "research.org" "Review" "Invitations")
+	 "*** TODO %^{Description} :review:\nDEADLINE: %^t\n**** Comments to Authors\n%?\n**** Comments to Editor\n"
+	 :jump-to-captured t)
+	("i" "Checkable subtask" checkitem (clock)
+	 "[ ] %^{Description}%?"
+	 :immediate-finish t :jump-to-captured t)
+	("n" "Note" entry (file+headline "notes.org" "Notes")
+	 "* %^{Description} :note:\n%?" :jump-to-captured t)))
+
+(setq org-directory "~/github/personal/orgs")
+(setq org-agenda-files (list "research.org" "teaching.org" "life.org"))
+(setq org-default-notes-file
+      (concat org-directory "/notes.org"))
+
+;; Custom agenda command definitions
+(define-key global-map "\C-cl" 'org-store-link)
+(define-key global-map "\C-ca" 'org-agenda)
+(define-key global-map "\C-cb" 'org-iswitchb)
+(define-key global-map "\C-cr" 'org-capture)
+
+;; ----------------------------------------------------------------------
+;; Org export options
+;; ----------------------------------------------------------------------
+
+;; LaTeX and beamer
+(setq org-format-latex-options
+      (plist-put org-format-latex-options :scale 2.5))
+(add-to-list 'org-latex-classes
+	     '("IEEEtran"
+	       "\\documentclass{IEEEtran}
+               [PACKAGES]
+               [EXTRA]"
+	       ("\\section{%s}" . "\\section*{%s}")
+	       ("\\subsection{%s}" . "\\subsection*{%s}")
+	       ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+	       ("\\paragraph{%s}" . "\\paragraph*{%s}")))
+
+(add-to-list 'org-latex-classes
+	     '("wmsnrpt"
+	       "\\documentclass[work]{wmsnrpt}
+               [NO-DEFAULT-PACKAGES]
+               [PACKAGES]
+               [EXTRA]"
+	       ("\\section{%s}" . "\\section*{%s}")
+	       ("\\subsection{%s}" . "\\subsection*{%s}")
+	       ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+	       ("\\paragraph{%s}" . "\\paragraph*{%s}")
+	       ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
+;; ;; Beamer related options
+;; (setq org-beamer-outline-frame-options "")
+
+;; LaTeX and beamer export
+(setq org-latex-listings t)
 (add-to-list 'org-latex-packages-alist '("" "listings"))
 (add-to-list 'org-latex-packages-alist '("" "color"))
-(setq org-latex-listings t)
 
-;; disable the pomodoro
-;; (require 'org-pomodoro)
-;; (setq request-curl "curl-735")
-;; (require 'org-toodledo)
-;; (setq org-toodledo-folder-support-mode 
-;; 	  (quote heading))
-;; (setq org-toodledo-sync-on-save "yes")
-;; (setq org-toodledo-userid "td5361f42a355de")
-;; (setq org-toodledo-password "qsgct1s")
-;; (setq org-toodledo-file "~/personal/orgs/toodledo.org")
+;; ;; Org-ref
+;; (setq bibtex-completion-bibliography
+;;       '("~/cloud/OneDrive/references/bbt-camerart.bib"))
+;; (define-key org-mode-map (kbd "C-c ]") 'org-ref-insert-link)
+;; (define-key org-mode-map (kbd "C-c (") org-ref-insert-ref-function)
+;; (define-key org-mode-map (kbd "C-c )") org-ref-insert-label-function)
+
 
 ;; Zotero rst mode still unsatisfactory.
 ;; (autoload 'zotero-rst-mode "zotero-rst" "" t)
 ;; (autoload 'org-zotero-mode "org-zotero" "" t)
-
-;; (setq org-toodledo-status-to-org-map
-;;   '(("Active" . "TODO")
-;;     ("None" . "TODO")
-;;     ("Next Action" . "TODO")
-;;     ("Planning" . "TODO")
-;;     ("Delegated" . "DELEG")
-;;     ("Waiting" . "WAIT")
-;;     ("Someday" . "SDAY")
-;;     ("Hold" . "SDAY")
-;;     ("Postponed" . "SDAY")
-;;     ("Canceled" . "CANCELED")
-;;     ("Reference" . "REFR")))
-
-(setq org-log-done 'time)
-(setq org-use-fast-todo-selection t)
-(setq org-treat-S-cursor-todo-selection-as-state-change nil)
-
-(setq org-todo-keywords
-	  (quote ((sequence "TODO(t)" "STARTED(s!)" "|" "DONE(d!/!)")
-			  (sequence "REFR(Q!)" "|" "DONE(d!/!)")
-			  (sequence "WAIT(w@/!)" "SDAY(S!)" 
-						"OPEN(O@)" "|" "CANCELLED(c@/!)" "PHONE")
-			  (sequence "DELEG(q!)" "|" 
-						"APPROVED(A@)" "EXPIRED(E@)" "REJECTED(R@)"))))
-
-(setq org-todo-keyword-faces
- 	  (quote (("TODO" :foreground "red" :weight bold)
-			  ("STARTED" :foreground "blue" :weight bold)
- 			  ("DONE" :foreground "forest green" :weight bold)
- 			  ("WAIT" :foreground "orange" :weight bold)
-			  ("SDAY" :foreground "magenta" :weight bold)
- 			  ("CANCELLED" :foreground "forest green" :weight bold)
-			  ("QUOTE" :foreground "red" :weight bold)
-			  ("REFR" :foreground "magenta" :weight bold)
-			  ("APPROVED" :foreground "forest green" :weight bold)
-			  ("EXPIRED" :foreground "forest green" :weight bold)
-			  ("REJECTED" :foreground "forest green" :weight bold)
-			  ("DELEG" :foreground "blue" :weight bold)
-			  ("PHONE" :foreground "forest green" :weight bold))))
- 
-(setq org-todo-state-tags-triggers
-	  (quote (("CANCELLED" ("CANCELLED" . t))
-              ("WAIT" ("WAIT" . t) ("NEXT"))
-              ("SDAY" ("WAIT" . t))
-              (done ("NEXT") ("WAIT"))
-              ("TODO" ("WAIT") ("CANCELLED") ("NEXT"))
-              ("STARTED" ("WAIT"))
-              ("DONE" ("WAIT") ("CANCELLED") ("NEXT")))))
-
-(setq org-directory "~/personal/orgs/")
-
-(setq org-agenda-files (list "toodledo.org"))
-(setq org-default-notes-file "~/personal/orgs/notes.org")
-
 
 ;; (defun ieee-parse-rss-entry (entry)
 ;;   "Parse the `:item-full-text' field for xml tags and create new properties."
@@ -128,14 +192,14 @@
 
 ;; (defvar ieee-filtered-entries)
 ;; (setq ieee-filtered-entries 
-;; 	  '((:author . "")
-;; 		(:title . "IEEE Foundation")
-;; 		(:title . "[Table of Contents]")
-;; 		(:title . "Table of Contents")
-;; 		(:title . "IEEE Xplore Digital Library [advertisement]")
-;; 		(:title . "IEEE Robotics and Automation Society Information")
-;; 		(:title . "IEEE Transactions on Robotics information for authors")
-;; 		(:title . "IEEE Transactions on Robotics publication information")))
+;;       '((:author . "")
+;; 	(:title . "IEEE Foundation")
+;; 	(:title . "[Table of Contents]")
+;; 	(:title . "Table of Contents")
+;; 	(:title . "IEEE Xplore Digital Library [advertisement]")
+;; 	(:title . "IEEE Robotics and Automation Society Information")
+;; 	(:title . "IEEE Transactions on Robotics information for authors")
+;; 	(:title . "IEEE Transactions on Robotics publication information")))
 
 ;; (defun ieee-filter-entry (entry)
 ;;   (if (member t (loop for (key . val) in ieee-filtered-entries
@@ -143,49 +207,29 @@
 ;;       nil
 ;;     entry))
 
+;; ;; Feeds
+
 ;; (setq org-feed-alist
-;; 	  '(("CVIU"
-;; 		 "http://feeds.sciencedirect.com/publication/science/10773142"
-;; 		 "~/personal/orgs/feeds.org" "Computer Vision and Image Understanding")
-;; 		("TPAMI"
-;; 		 "http://csdl.computer.org/rss/tpami.xml"
-;; 		 "~/personal/orgs/feeds.org" "PAMI")
-;; 		("TCSVT"
-;; 		 "http://ieeexplore.ieee.org/rss/TOC76.XML"
-;; 		 "~/personal/orgs/feeds.org" "CSVT"
-;; 		 :parse-entry ieee-parse-rss-entry
-;; 		 :filter ieee-filter-entry)))
-
-;; these custom agenda views will be displayed in the org-mobile app
-(setq org-agenda-custom-commands
-      '(("x" "MobileOrg TODO List" todo "TODO|STARTED|WAIT" nil
-		 (org-agenda-sorting-strategy '(priority-up effort-down)))
-		("y" alltodo "")
-		("z" "MobileOrg Agenda" agenda "" ((org-agenda-ndays 3)))))
-
-(setq org-agenda-start-on-weekday 0)
-
-;; ("G" "GTD Block Agenda"
-;;          ((tags-todo "office")
-;;           (tags-todo "reading")
-;;           (tags-todo "phone")
-;;           (tags-todo "writing")))
-
-(setq org-clock-persist 'history)
-(org-clock-persistence-insinuate)
-
+;;       '(("PR"
+;; 	 "http://feeds.sciencedirect.com/publication/science/00313203"
+;; 	 "~/github/personal/orgs/feeds.org" "Pattern Recognition")
+;; 	;; ("TPAMI"
+;; 	;;  "http://csdl.computer.org/rss/tpami.xml"
+;; 	;;  "~/github/personal/orgs/feeds.org" "PAMI")
+;; 	("TCSVT"
+;; 	 "http://ieeexplore.ieee.org/rss/TOC76.XML"
+;; 	 "~/github/personal/orgs/feeds.org" "TCSVT")))
+;; 	 ;; :parse-entry ieee-parse-rss-entry
+;; 	 ;; :filter ieee-filter-entry)))
 ;; ----------------------------------------------------------------------
 ;; Refile Setup
 ;; ----------------------------------------------------------------------
 
-;; Use IDO for target completion
-(setq org-completion-use-ido t)
 ;; Targets include this file and any file contributing to the agenda
 ;;  - up to 5 levels deep
 (setq org-refile-targets 
-	  (quote ((nil :maxlevel . 5)
-			  ("journal.org" :maxlevel . 5)
-			  ("reading.org" :maxlevel . 5))))
+      (quote ((nil :maxlevel . 5)
+	      ("journal.org" :maxlevel . 5))))
 
 ;; Targets start with the file name - allows creating level 1 tasks
 (setq org-refile-use-outline-path (quote file))
@@ -201,155 +245,79 @@
 ;; Make RefTeX mode work with Org mode
 ;; ----------------------------------------------------------------------
 (defun org-mode-myhook ()
-  ;; Open PDFs files with Evince
-  (if linux-p
-	  (progn
-		(delete '("\\.pdf\\'" . default) org-file-apps)
-		(add-to-list 'org-file-apps '("\\.pdf\\'" . "evince %s"))))
-  ;; Make RefTeX mode work with org mode
-  (load-library "reftex")
-  (and (buffer-file-name)
-	   (file-exists-p (buffer-file-name))
-	   (reftex-parse-all))
-  (define-key org-mode-map (kbd "C-c [") 'reftex-citation))
-
+  (progn
+    (delete '("\\.pdf\\'" . default) org-file-apps)
+    (add-to-list 'org-file-apps '("\\.pdf\\'" . "evince %s"))))
+;; ;; Make RefTeX mode work with org mode
+;; (load-library "reftex")
+;; (and (buffer-file-name)
+;; 	   (file-exists-p (buffer-file-name))
+;; 	   (reftex-parse-all))
+;; (define-key org-mode-map (kbd "C-c [") 'reftex-citation))
 (add-hook 'org-mode-hook 'org-mode-myhook)
-
-;; ----------------------------------------------------------------------
-;; Org export options
-;; ----------------------------------------------------------------------
-
-(add-to-list 'org-latex-classes
-			 '("wmsnrpt"
-			   "\\documentclass[work]{wmsnrpt}"
-			   ("\n\\section{%s}" . "\n\\section*{%s}")
-			   ("\n\\subsection{%s}" . "\n\\subsection*{%s}")
-			   ("\n\\subsubsection{%s}" . "\n\\subsubsection*{%s}")
-			   ("\\paragraph{%s}" . "\\paragraph*{%s}")
-			   ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
-
-(add-to-list 'org-latex-classes
-			 '("wmsnlect"
-			   "\\documentclass{wmsnlect}"
-			   ("\n\\section{%s}" . "\n\\section*{%s}")
-			   ("\n\\subsection{%s}" . "\n\\subsection*{%s}")
-			   ("\n\\subsubsection{%s}" . "\n\\subsubsection*{%s}")
-			   ("\\paragraph{%s}" . "\\paragraph*{%s}")
-			   ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
-
-(add-to-list 'org-latex-classes
-			 '("course"
-			   "\\documentclass{course}"
-			   ("\n\\section{%s}" . "\n\\section*{%s}")
-			   ("\n\\subsection{%s}" . "\n\\subsection*{%s}")
-			   ("\n\\subsubsection{%s}" . "\n\\subsubsection*{%s}")
-			   ("\\paragraph{%s}" . "\\paragraph*{%s}")
-			   ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
-
-(add-to-list 'org-latex-classes
-			 '("IEEEtran"
-			   "\\documentclass{IEEEtran}"
-			   ("\n\\section{%s}" . "\n\\section*{%s}")
-			   ("\n\\subsection{%s}" . "\n\\subsection*{%s}")
-			   ("\n\\subsubsection{%s}" . "\n\\subsubsection*{%s}")
-			   ("\\paragraph{%s}" . "\\paragraph*{%s}")))
-
-;; Beamer related options
-(setq org-beamer-outline-frame-options "")
-
-(setq org-export-latex-packages-alist
-	  (quote (("" "graphicx" t)
-			  ("" "amsmath" t)
-			  ("" "amssymb" t)
-			  ("" "subfig" t)
-			  ("" "hyperref" nil))))
-
-;; Dim blocked tasks
-(setq org-agenda-dim-blocked-tasks t)
-
-;; Compact the block agenda view
-(setq org-agenda-compact-blocks t)
-
-;; Custom agenda command definitions
-
-(define-key global-map "\C-cl" 'org-store-link)
-(define-key global-map "\C-ca" 'org-agenda)
-(define-key global-map "\C-cb" 'org-iswitchb)
-(define-key global-map "\C-cr" 'org-capture)
 
 ;; ----------------------------------------------------------------------
 ;; Capture templates for: TODO tasks, Notes, appointments, phone calls
 ;; ----------------------------------------------------------------------
 
-;; ----------------------------------------------------------------------
-;; Settings for syncing with MobileOrg via Dropbox
-;; ----------------------------------------------------------------------
-(setq org-mobile-directory "~/cloud/dropbox-work/Apps/orgs")
-(setq org-mobile-inbox-for-pull "~/cloud/dropbox-work/Apps/orgs/inbox.org")
+;; ;; ----------------------------------------------------------------------
+;; ;; Make RefTeX mode work with rst mode
+;; ;; ----------------------------------------------------------------------
 
-;; Enable org-babel languages
-(org-babel-do-load-languages
- 'org-babel-load-languages '((python . t)
-							 (emacs-lisp . t)))
+;; (defun rst-locate-citation-files (master-dir &optional files)
+;;   ;; Scan buffer for citation macro and return file list.
+;;   ;; (print "ORG INIT:")					; DEBUG Info
+;;   ;; (print major-mode)					; DEBUG Info
+;;   (if (string= major-mode "latex-mode")
+;; 	  (progn
+;; 		(setq bibre
+;; 			  (concat "\\(^\\)[^%\n\r]*\\\\\\("
+;; 					  (mapconcat 'identity reftex-bibliography-commands "\\|")
+;; 					  "\\){[ \t]*\\([^}]+\\)"))
+;; 		(setq splitre "[ \t\n\r]*,[ \t\n\r]*")))
 
-;; ----------------------------------------------------------------------
-;; Make RefTeX mode work with rst mode
-;; ----------------------------------------------------------------------
-
-(defun rst-locate-citation-files (master-dir &optional files)
-  ;; Scan buffer for citation macro and return file list.
-  ;; (print "ORG INIT:")					; DEBUG Info
-  ;; (print major-mode)					; DEBUG Info
-  (if (string= major-mode "latex-mode")
-	  (progn
-		(setq bibre
-			  (concat "\\(^\\)[^%\n\r]*\\\\\\("
-					  (mapconcat 'identity reftex-bibliography-commands "\\|")
-					  "\\){[ \t]*\\([^}]+\\)"))
-		(setq splitre "[ \t\n\r]*,[ \t\n\r]*")))
-
-  (if (string= major-mode "rst-mode")
-	(progn
-	  (setq bibre
-			(concat "\\(^\\)\\.\\.[ \t]*\\("
-					"citation\\|bibliography" "\\)::[ \t]*\\(.+\\)"))
-	  (setq splitre "[ \t\n\r]+")))
+;;   (if (string= major-mode "rst-mode")
+;; 	(progn
+;; 	  (setq bibre
+;; 			(concat "\\(^\\)\\.\\.[ \t]*\\("
+;; 					"citation\\|bibliography" "\\)::[ \t]*\\(.+\\)"))
+;; 	  (setq splitre "[ \t\n\r]+")))
   
-  (unless files
-    (save-excursion
-      (goto-char (point-min))
-      (if (re-search-forward bibre nil t)
-          (setq files (split-string 
-					   (when (match-beginning 3)
-						 (buffer-substring-no-properties
-						  (match-beginning 3) (match-end 3)))
-					   splitre)))))
-  ;; (print files)							; DEBUG Info
-  (when files
-    (setq files 
-          (mapcar
-           (lambda (x)
-             (if (or (member x reftex-bibfile-ignore-list)
-                     (delq nil (mapcar (lambda (re) (string-match re x))
-                                       reftex-bibfile-ignore-regexps)))
-                 ;; excluded file
-                 nil
-               ;; find the file
-               (reftex-locate-file x "bib" master-dir)))
-           files))
-	;; (print files)						; DEBUG Info
-    (delq nil files)))
+;;   (unless files
+;;     (save-excursion
+;;       (goto-char (point-min))
+;;       (if (re-search-forward bibre nil t)
+;;           (setq files (split-string 
+;; 					   (when (match-beginning 3)
+;; 						 (buffer-substring-no-properties
+;; 						  (match-beginning 3) (match-end 3)))
+;; 					   splitre)))))
+;;   ;; (print files)							; DEBUG Info
+;;   (when files
+;;     (setq files 
+;;           (mapcar
+;;            (lambda (x)
+;;              (if (or (member x reftex-bibfile-ignore-list)
+;;                      (delq nil (mapcar (lambda (re) (string-match re x))
+;;                                        reftex-bibfile-ignore-regexps)))
+;;                  ;; excluded file
+;;                  nil
+;;                ;; find the file
+;;                (reftex-locate-file x "bib" master-dir)))
+;;            files))
+;; 	;; (print files)						; DEBUG Info
+;;     (delq nil files)))
 
-(defun fred-rst-mode-hook ()
-  (make-local-variable 'reftex-cite-format)
-  (setq reftex-cite-format ":cite:`%l`")
-  (fset 'reftex-locate-bibliography-files
-		'rst-locate-citation-files)
-  (turn-on-reftex)
-  (reftex-parse-all)
-  (define-key rst-mode-map (kbd "C-c [") 'reftex-citation))
+;; (defun fred-rst-mode-hook ()
+;;   (make-local-variable 'reftex-cite-format)
+;;   (setq reftex-cite-format ":cite:`%l`")
+;;   (fset 'reftex-locate-bibliography-files
+;; 		'rst-locate-citation-files)
+;;   (turn-on-reftex)
+;;   (reftex-parse-all)
+;;   (define-key rst-mode-map (kbd "C-c [") 'reftex-citation))
 
-;; (add-hook 'rst-mode-hook 'fred-rst-mode-hook)
+;; ;; (add-hook 'rst-mode-hook 'fred-rst-mode-hook)
 
 ;; ----------------------------------------------------------------------
 ;;; END OF FILE 

@@ -9,8 +9,8 @@
 ;; ----------------------------------------------------------------------
 ;;; CHANGE LOG
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2022-01-19 15:23:42(+0800) [by Fred Qi]
-;;     Update #: 50
+;; Last-Updated: 2022-09-20 10:10:13(+0800) [by Fred Qi]
+;;     Update #: 56
 ;; ----------------------------------------------------------------------
 
 ;; (require 'python)
@@ -40,6 +40,9 @@
 (setq python-python-command local-python-path)
 
 (add-hook 'python-mode-hook 'fred-python-mode-hook)
+
+(setq conda-anaconda-home "/opt/conda")
+(require 'conda)
 
 ;; (require 'ein)
 
