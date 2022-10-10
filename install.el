@@ -4,8 +4,8 @@
 ;; Author: Fred Qi
 ;; Created: 2022-01-17 23:15:18(+0800)
 ;;
-;; Last-Updated: 2022-01-23 20:59:02(+0800) [by Fred Qi]
-;;     Update #: 105
+;; Last-Updated: 2022-10-10 23:39:17(+0800) [by Fred Qi]
+;;     Update #: 111
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Commentary:
@@ -41,12 +41,12 @@
 	docker docker-compose-mode dockerfile-mode
 	cmake-mode cmake-ide
 	go-mode
-	cython-mode django-mode toml-mode
+	cython-mode django-mode toml-mode conda
 	markdown-mode
 	csv-mode yaml-mode
-	matlab-mode
-	julia-mode
-	android-mode))
+	org-pomodoro
+	ox-hugo ox-reveal gnuplot
+	elfeed))
 
 (when (cl-find-if-not #'package-installed-p package-selected-packages)
   (package-refresh-contents)

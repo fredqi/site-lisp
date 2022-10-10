@@ -13,8 +13,8 @@
 ;;  - https://jamiecollinson.com/blog/my-emacs-config/
 ;;  - https://ianyepan.github.io/posts/setting-up-use-package/
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2022-09-26 19:34:14(+0800) [by Fred Qi]
-;;     Update #: 917
+;; Last-Updated: 2022-10-10 23:23:36(+0800) [by Fred Qi]
+;;     Update #: 985
 ;; ----------------------------------------------------------------------
 
 ;;; Code:
@@ -23,29 +23,20 @@
 (require 'org)
 (require 'org-pomodoro)
 (require 'ox-beamer)
-;; (use-package ox-hugo :ensure t :pin melpa :after ox)
 (require 'ox-hugo)
 
-(use-package markdown-mode
-  :bind
-  (("C-c C-s a" . markdown-table-align))
-  :mode
-  ("\\.markdown\\'" . markdown-mode)
-  ("\\.md\\'" . markdown-mode)
-  ("README\\.md$" . gfm-mode))
-
 (eval-after-load "org"
-    (progn
-      (org-babel-do-load-languages
-       'org-babel-load-languages
-       '((python . t)
-	 (shell . t)
-	 (emacs-lisp . t)
-	 (gnuplot . t)
-	 (dot . t)))
-      (setq org-confirm-babel-evaluate nil)
-      (conda-env-activate "base")
-      (setq org-babel-python-command "python3")))
+  (progn
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((python . t)
+       (shell . t)
+       (emacs-lisp . t)
+       (gnuplot . t)
+       (dot . t)))
+    (setq org-confirm-babel-evaluate nil)
+    (conda-env-activate "base")
+    (setq org-babel-python-command "python3")))
 
 (setq org-agenda-custom-commands
       '(("r" "Research tasks"
@@ -95,11 +86,15 @@
         ("STARTED" ("WAIT"))
         ("DONE" ("WAIT") ("CANCELLED") ("NEXT"))))
 
+;; Capture templates
 (setq org-capture-templates
       '(("r" "Reading task" entry
 	 (file+olp "research.org" "General Research" "Reading list")
 	 "*** TODO %^{Description}%? :read:"
 	 :immediate-finish t :jump-to-captured t)
+	("l" "Read an elfeed entry" entry
+	 (file+olp "research.org" "General Research" "Reading list")
+	 "*** TODO %a :read:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+1w\"))\n%(oc-get-elfeed-entry)\n")
 	("w" "Writing task" entry
 	 (file+olp "research.org" "General Research" "Writing list")
 	 "*** TODO %^{Description}%? :write:"
@@ -154,25 +149,10 @@
 	       ("\\paragraph{%s}" . "\\paragraph*{%s}")
 	       ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
-;; ;; Beamer related options
-;; (setq org-beamer-outline-frame-options "")
-
 ;; LaTeX and beamer export
 (setq org-latex-listings t)
 (add-to-list 'org-latex-packages-alist '("" "listings"))
 (add-to-list 'org-latex-packages-alist '("" "color"))
-
-;; ;; Org-ref
-;; (setq bibtex-completion-bibliography
-;;       '("~/cloud/OneDrive/references/bbt-camerart.bib"))
-;; (define-key org-mode-map (kbd "C-c ]") 'org-ref-insert-link)
-;; (define-key org-mode-map (kbd "C-c (") org-ref-insert-ref-function)
-;; (define-key org-mode-map (kbd "C-c )") org-ref-insert-label-function)
-
-
-;; Zotero rst mode still unsatisfactory.
-;; (autoload 'zotero-rst-mode "zotero-rst" "" t)
-;; (autoload 'org-zotero-mode "org-zotero" "" t)
 
 ;; (defun ieee-parse-rss-entry (entry)
 ;;   "Parse the `:item-full-text' field for xml tags and create new properties."
@@ -191,7 +171,7 @@
 ;;   entry)
 
 ;; (defvar ieee-filtered-entries)
-;; (setq ieee-filtered-entries 
+;; (setq ieee-filtered-entries
 ;;       '((:author . "")
 ;; 	(:title . "IEEE Foundation")
 ;; 	(:title . "[Table of Contents]")
@@ -207,118 +187,32 @@
 ;;       nil
 ;;     entry))
 
-;; ;; Feeds
-
-;; (setq org-feed-alist
-;;       '(("PR"
-;; 	 "http://feeds.sciencedirect.com/publication/science/00313203"
-;; 	 "~/github/personal/orgs/feeds.org" "Pattern Recognition")
-;; 	;; ("TPAMI"
-;; 	;;  "http://csdl.computer.org/rss/tpami.xml"
-;; 	;;  "~/github/personal/orgs/feeds.org" "PAMI")
-;; 	("TCSVT"
-;; 	 "http://ieeexplore.ieee.org/rss/TOC76.XML"
-;; 	 "~/github/personal/orgs/feeds.org" "TCSVT")))
-;; 	 ;; :parse-entry ieee-parse-rss-entry
-;; 	 ;; :filter ieee-filter-entry)))
-;; ----------------------------------------------------------------------
 ;; Refile Setup
 ;; ----------------------------------------------------------------------
 
 ;; Targets include this file and any file contributing to the agenda
 ;;  - up to 5 levels deep
-(setq org-refile-targets 
+(setq org-refile-targets
       (quote ((nil :maxlevel . 5)
 	      ("journal.org" :maxlevel . 5))))
 
 ;; Targets start with the file name - allows creating level 1 tasks
 (setq org-refile-use-outline-path (quote file))
 
-;; Targets complete in steps so we start with filename, 
+;; Targets complete in steps so we start with filename,
 ;; TAB shows the next level of targets etc
 (setq org-outline-path-complete-in-steps t)
 
 ;; Allow refile to create parent tasks with confirmation
 (setq org-refile-allow-creating-parent-nodes (quote confirm))
 
-;; ----------------------------------------------------------------------
-;; Make RefTeX mode work with Org mode
-;; ----------------------------------------------------------------------
 (defun org-mode-myhook ()
   (progn
     (delete '("\\.pdf\\'" . default) org-file-apps)
     (add-to-list 'org-file-apps '("\\.pdf\\'" . "evince %s"))))
-;; ;; Make RefTeX mode work with org mode
-;; (load-library "reftex")
-;; (and (buffer-file-name)
-;; 	   (file-exists-p (buffer-file-name))
-;; 	   (reftex-parse-all))
-;; (define-key org-mode-map (kbd "C-c [") 'reftex-citation))
+
 (add-hook 'org-mode-hook 'org-mode-myhook)
 
 ;; ----------------------------------------------------------------------
-;; Capture templates for: TODO tasks, Notes, appointments, phone calls
-;; ----------------------------------------------------------------------
-
-;; ;; ----------------------------------------------------------------------
-;; ;; Make RefTeX mode work with rst mode
-;; ;; ----------------------------------------------------------------------
-
-;; (defun rst-locate-citation-files (master-dir &optional files)
-;;   ;; Scan buffer for citation macro and return file list.
-;;   ;; (print "ORG INIT:")					; DEBUG Info
-;;   ;; (print major-mode)					; DEBUG Info
-;;   (if (string= major-mode "latex-mode")
-;; 	  (progn
-;; 		(setq bibre
-;; 			  (concat "\\(^\\)[^%\n\r]*\\\\\\("
-;; 					  (mapconcat 'identity reftex-bibliography-commands "\\|")
-;; 					  "\\){[ \t]*\\([^}]+\\)"))
-;; 		(setq splitre "[ \t\n\r]*,[ \t\n\r]*")))
-
-;;   (if (string= major-mode "rst-mode")
-;; 	(progn
-;; 	  (setq bibre
-;; 			(concat "\\(^\\)\\.\\.[ \t]*\\("
-;; 					"citation\\|bibliography" "\\)::[ \t]*\\(.+\\)"))
-;; 	  (setq splitre "[ \t\n\r]+")))
-  
-;;   (unless files
-;;     (save-excursion
-;;       (goto-char (point-min))
-;;       (if (re-search-forward bibre nil t)
-;;           (setq files (split-string 
-;; 					   (when (match-beginning 3)
-;; 						 (buffer-substring-no-properties
-;; 						  (match-beginning 3) (match-end 3)))
-;; 					   splitre)))))
-;;   ;; (print files)							; DEBUG Info
-;;   (when files
-;;     (setq files 
-;;           (mapcar
-;;            (lambda (x)
-;;              (if (or (member x reftex-bibfile-ignore-list)
-;;                      (delq nil (mapcar (lambda (re) (string-match re x))
-;;                                        reftex-bibfile-ignore-regexps)))
-;;                  ;; excluded file
-;;                  nil
-;;                ;; find the file
-;;                (reftex-locate-file x "bib" master-dir)))
-;;            files))
-;; 	;; (print files)						; DEBUG Info
-;;     (delq nil files)))
-
-;; (defun fred-rst-mode-hook ()
-;;   (make-local-variable 'reftex-cite-format)
-;;   (setq reftex-cite-format ":cite:`%l`")
-;;   (fset 'reftex-locate-bibliography-files
-;; 		'rst-locate-citation-files)
-;;   (turn-on-reftex)
-;;   (reftex-parse-all)
-;;   (define-key rst-mode-map (kbd "C-c [") 'reftex-citation))
-
-;; ;; (add-hook 'rst-mode-hook 'fred-rst-mode-hook)
-
-;; ----------------------------------------------------------------------
-;;; END OF FILE 
+;;; END OF FILE
 ;; ----------------------------------------------------------------------

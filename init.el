@@ -12,8 +12,8 @@
 ;; 2006-03-23 23:06:51(+0800)    Fred Qi@mobile  
 ;;    Added the local settings for laptop, lab, and dorm of Windows NT.
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2022-01-19 16:22:18(+0800) [by Fred Qi]
-;;     Update #: 538
+;; Last-Updated: 2022-10-10 23:10:39(+0800) [by Fred Qi]
+;;     Update #: 541
 ;; ----------------------------------------------------------------------
 
 ;; ----------------------------------------------------------------------
@@ -164,6 +164,7 @@
 (load "pyinit.el" nil t t)	;; Python related settings
 ;; (load "mathinit.el" nil t t)    ;; Math software related settings
 (load "orginit.el" nil t t)     ;; Org mode settings
+(load "feedinit.el" nil t t)
 ;; (load "museinit.el" nil t t)	;; load muse packages
 
 ;; ----------------------------------------------------------------------

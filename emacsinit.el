@@ -12,8 +12,8 @@
 ;;    Move the ess package to mathinit.el.
 ;;    Setting user-full-name with respect to machine and OS platform.
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2022-09-22 18:49:52(+0800) [by Fred Qi]
-;;     Update #: 1046
+;; Last-Updated: 2022-10-10 23:19:30(+0800) [by Fred Qi]
+;;     Update #: 1050
 ;; ----------------------------------------------------------------------
 ;;
 ;;
@@ -378,10 +378,17 @@
       (message "Region has %d words" n) 
       n)))
 
+(use-package markdown-mode
+  :bind
+  (("C-c C-s a" . markdown-table-align))
+  :mode
+  ("\\.markdown\\'" . markdown-mode)
+  ("\\.md\\'" . markdown-mode)
+  ("README\\.md$" . gfm-mode))
+
 ;; ----------------------------------------------------------------------
 ;; MY PREFERRED KEY BINDINGS
 ;; ----------------------------------------------------------------------
-
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "C-c ;") 'comment-or-uncomment-region)
 (global-set-key (kbd "C-c r") 'comment-region)
