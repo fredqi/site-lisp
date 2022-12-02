@@ -9,8 +9,8 @@
 ;; ----------------------------------------------------------------------
 ;;; CHANGE LOG
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2022-09-20 10:10:13(+0800) [by Fred Qi]
-;;     Update #: 56
+;; Last-Updated: 2022-10-24 18:41:07(+0800) [by Fred Qi]
+;;     Update #: 57
 ;; ----------------------------------------------------------------------
 
 ;; (require 'python)
@@ -49,8 +49,8 @@
 (use-package yaml-mode
   :mode ("\\.ya?ml\\'" . yaml-mode))
 
-(require 'android-mode)
-(setq android-mode-sdk-dir "~/android/sdk")
+;; (require 'android-mode)
+;; (setq android-mode-sdk-dir "~/android/sdk")
 
 ;; ----------------------------------------------------------------------
 ;;; END OF FILE 

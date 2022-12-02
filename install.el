@@ -4,8 +4,8 @@
 ;; Author: Fred Qi
 ;; Created: 2022-01-17 23:15:18(+0800)
 ;;
-;; Last-Updated: 2022-10-10 23:39:17(+0800) [by Fred Qi]
-;;     Update #: 111
+;; Last-Updated: 2022-11-04 13:52:54(+0800) [by Fred Qi]
+;;     Update #: 112
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Commentary:
@@ -25,11 +25,11 @@
 
 (package-initialize)
 (setq package-archives
-      '(("gnu" . "http://elpa.gnu.org/packages/")
+      '(("gnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
 	;; ("marmalade" . "http://marmalade-repo.org/packages/")
 	;; ("elpy" . "http://jorgenschaefer.github.io/packages/")
 	;; ("orgmode" . "http://orgmode.org/elpa/")
-	("melpa" . "http://melpa.org/packages/")))
+	("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
 
 (setq package-selected-packages
       '(use-package
@@ -44,8 +44,7 @@
 	cython-mode django-mode toml-mode conda
 	markdown-mode
 	csv-mode yaml-mode
-	org-pomodoro
-	ox-hugo ox-reveal gnuplot
+	ox-hugo ox-reveal citeproc gnuplot
 	elfeed))
 
 (when (cl-find-if-not #'package-installed-p package-selected-packages)

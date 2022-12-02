@@ -13,17 +13,18 @@
 ;;  - https://jamiecollinson.com/blog/my-emacs-config/
 ;;  - https://ianyepan.github.io/posts/setting-up-use-package/
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2022-10-10 23:23:36(+0800) [by Fred Qi]
-;;     Update #: 985
+;; Last-Updated: 2022-11-20 15:39:36(+0800) [by Fred Qi]
+;;     Update #: 998
 ;; ----------------------------------------------------------------------
 
 ;;; Code:
 
 ;; Org-mode settings
 (require 'org)
-(require 'org-pomodoro)
+;; (require 'org-pomodoro)
 (require 'ox-beamer)
 (require 'ox-hugo)
+(require 'oc-csl)
 
 (eval-after-load "org"
   (progn
@@ -34,9 +35,14 @@
        (emacs-lisp . t)
        (gnuplot . t)
        (dot . t)))
-    (setq org-confirm-babel-evaluate nil)
+    (setq org-duration-format (quote h:mm))
+    (setq org-confirm-babel-evaluate nil)    
     (conda-env-activate "base")
-    (setq org-babel-python-command "python3")))
+    (setq org-babel-python-command "python3")
+    (setq org-cite-csl-styles-dir "~/cloud/zotero/styles")))
+
+(with-eval-after-load 'ox-hugo
+  (plist-put org-hugo-citations-plist :bibliography-section-heading "References"))
 
 (setq org-agenda-custom-commands
       '(("r" "Research tasks"
@@ -94,7 +100,7 @@
 	 :immediate-finish t :jump-to-captured t)
 	("l" "Read an elfeed entry" entry
 	 (file+olp "research.org" "General Research" "Reading list")
-	 "*** TODO %a :read:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+1w\"))\n%(oc-get-elfeed-entry)\n")
+	 "*** TODO %a :read:\n%(oc-get-elfeed-entry)\n")
 	("w" "Writing task" entry
 	 (file+olp "research.org" "General Research" "Writing list")
 	 "*** TODO %^{Description}%? :write:"
