@@ -4,8 +4,8 @@
 ;; Author: Fred Qi
 ;; Created: 2022-10-08 18:26:37(+0800)
 ;;
-;; Last-Updated: 2022-10-10 23:36:06(+0800) [by Fred Qi]
-;;     Update #: 270
+;; Last-Updated: 2023-06-07 13:51:17(+0800) [by Fred Qi]
+;;     Update #: 309
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Commentary:
@@ -21,7 +21,6 @@
 ;; https://www.astro.umd.edu/~chongchong/emacs-dotfile/#org1791dd2
 
 ;;; Code:
-
 (defun compose-arxiv-rss-search (category tag length)
   "Composing arXiv RSS search."
   (let* ((arxiv-api-prefix "https://export.arxiv.org/api/query?")
@@ -35,19 +34,36 @@
 	 (arxiv-rss (concat arxiv-api-prefix "search_query=" arxiv-api-options)))
     (list arxiv-rss tag)))
 
+(defun compose-nature-rss-search (category tag length)
+  "Composing arXiv RSS search."
+  (let* ((nature-rss-prefix "https://www.nature.com/subjects/")
+	 (nature-rss-subject (concat category ".rss"))
+	 (nature-rss (concat nature-rss-prefix nature-rss-subject)))
+    (list nature-rss tag)))
+
 (use-package elfeed
   :ensure t
   :defer t
   :commands (elfeed)
   :bind ("C-x w" . elfeed)
   :config
-  (setq elfeed-feeds
-	(list (compose-arxiv-rss-search "cs.CV" 'CVPR 128)
-	      (compose-arxiv-rss-search "cs.MM" 'MM 128)
-	      (compose-arxiv-rss-search "cs.LG" 'ML 128))))
+  (progn
+    (setq elfeed-search-print-entry-function #'my-search-print-fn)
+    (setq elfeed-feeds
+	  (list (compose-arxiv-rss-search "cs.CV" 'CVPR 128)
+		(compose-arxiv-rss-search "cs.MM" 'MM 128)
+		(compose-arxiv-rss-search "cs.LG" 'ML 128)
+		(compose-nature-rss-search "atmospheric-science" 'Nature 64)
+		(compose-nature-rss-search "wind-energy" 'Nature 64)
+		(compose-nature-rss-search "statistics" 'Nature 64)
+		(compose-nature-rss-search "computer-science" 'Nature 64)))))
 
-;; (require 'elfeed-score)
-;; (elfeed-score-enable)
+(use-package elfeed-score
+  :ensure t
+  :config
+  (progn
+    (elfeed-score-enable)
+    (define-key elfeed-search-mode-map "=" elfeed-score-map)))
 
 (defun concatenate-authors (authors-list &optional fullname)
   "Given AUTHORS-LIST, list of plists; return string of all authors concatenated."
@@ -103,28 +119,28 @@
     (when tags
       (insert "(" tags-str ")"))))
 
-(setq elfeed-search-print-entry-function #'my-search-print-fn)
+;; (setq elfeed-search-print-entry-function #'my-search-print-fn)
 
-(setq elfeed-feeds
-      (list (compose-arxiv-rss-search "cs.CV" 'CVPR 128)
-	    (compose-arxiv-rss-search "cs.MM" 'MM 128)
-	    (compose-arxiv-rss-search "cs.LG" 'ML 128)))
+;; (setq elfeed-feeds
+;;       (list (compose-arxiv-rss-search "cs.CV" 'CVPR 128)
+;; 	    (compose-arxiv-rss-search "cs.MM" 'MM 128)
+;; 	    (compose-arxiv-rss-search "cs.LG" 'ML 128)))
 
 ;; org capture in elfeed
 (defun oc-get-elfeed-entry ()
   (when org-store-link-plist
-    (let* ((title (plist-get org-store-link-plist :elfeed-entry-title))
+    (let* ((title (plist-get org-store-link-plist :annotation))
 	   (link (plist-get org-store-link-plist :elfeed-entry-link))
-	   (content (elfeed-deref
-		     (plist-get org-store-link-plist :elfeed-entry-content)))
+	   ;; (title (plist-get org-store-link-plist :elfeed-entry-title))
+	   ;; (content (elfeed-deref
+	   ;; 	     (plist-get org-store-link-plist :elfeed-entry-content)))
 	   (entry-date (format-time-string
 			"%Y-%m-%d"
 			(plist-get org-store-link-plist :elfeed-entry-date)))
 	   (entry-meta (plist-get org-store-link-plist :elfeed-entry-meta))
 	   (entry-authors (concatenate-authors (plist-get entry-meta :authors) t))
 	   (entry-categories (string-join (plist-get entry-meta :categories) " ")))
-      (concat "\n  " entry-authors "\n  [[" link "]] "
-	      entry-categories " " entry-date "\n\n" content))))
+      (concat "    " entry-authors "\n    [[" link "]] " entry-categories " " entry-date "\n"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; feed.el ends here

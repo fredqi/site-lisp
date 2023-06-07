@@ -12,8 +12,8 @@
 ;; 2006-04-24 00:05:24(+0800)    Fred Qi@lab
 ;;    Added a elisp function to recursively generating etags.
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2022-01-23 22:03:54(+0800) [by Fred Qi]
-;;     Update #: 569
+;; Last-Updated: 2023-06-07 12:09:46(+0800) [by Fred Qi]
+;;     Update #: 582
 ;; ----------------------------------------------------------------------
 
 ;; ----------------------------------------------------------------------
@@ -192,9 +192,6 @@
                  (not (search ".svn" file)))
             (setq dirlist (cons file dirlist)))
 		(setq files-currdir (cdr files-currdir))))))
-
-
-;; hh mk:@MSITStore:%wxwin%\docs\htmlhelp\wx.chm::/wx_wxslider.html#wxslidergetticks
 
 ;; ----------------------------------------------------------------------
 ;;; END OF FILE

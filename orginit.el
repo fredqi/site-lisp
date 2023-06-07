@@ -13,14 +13,14 @@
 ;;  - https://jamiecollinson.com/blog/my-emacs-config/
 ;;  - https://ianyepan.github.io/posts/setting-up-use-package/
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2022-11-20 15:39:36(+0800) [by Fred Qi]
-;;     Update #: 998
+;; Last-Updated: 2023-06-07 13:47:21(+0800) [by Fred Qi]
+;;     Update #: 1017
 ;; ----------------------------------------------------------------------
 
 ;;; Code:
 
-;; Org-mode settings
 (require 'org)
+
 ;; (require 'org-pomodoro)
 (require 'ox-beamer)
 (require 'ox-hugo)
@@ -30,15 +30,16 @@
   (progn
     (org-babel-do-load-languages
      'org-babel-load-languages
-     '((python . t)
-       (shell . t)
+     '((shell . t)
        (emacs-lisp . t)
+       ;; (python . t)
        (gnuplot . t)
        (dot . t)))
     (setq org-duration-format (quote h:mm))
-    (setq org-confirm-babel-evaluate nil)    
-    (conda-env-activate "base")
-    (setq org-babel-python-command "python3")
+    (setq org-confirm-babel-evaluate nil)
+    (setq org-latex-listings t)
+    ;; (conda-env-activate "base")
+    ;; (setq org-babel-python-command "python3")
     (setq org-cite-csl-styles-dir "~/cloud/zotero/styles")))
 
 (with-eval-after-load 'ox-hugo
@@ -144,6 +145,16 @@
 	       ("\\paragraph{%s}" . "\\paragraph*{%s}")))
 
 (add-to-list 'org-latex-classes
+	     '("ctexart"
+	       "\\documentclass{ctexart}
+               [PACKAGES]
+               [EXTRA]"
+	       ("\\section{%s}" . "\\section*{%s}")
+	       ("\\subsection{%s}" . "\\subsection*{%s}")
+	       ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+	       ("\\paragraph{%s}" . "\\paragraph*{%s}")))
+
+(add-to-list 'org-latex-classes
 	     '("wmsnrpt"
 	       "\\documentclass[work]{wmsnrpt}
                [NO-DEFAULT-PACKAGES]
@@ -156,7 +167,6 @@
 	       ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
 ;; LaTeX and beamer export
-(setq org-latex-listings t)
 (add-to-list 'org-latex-packages-alist '("" "listings"))
 (add-to-list 'org-latex-packages-alist '("" "color"))
 

@@ -12,8 +12,8 @@
 ;;    Move the ess package to mathinit.el.
 ;;    Setting user-full-name with respect to machine and OS platform.
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2022-10-10 23:19:30(+0800) [by Fred Qi]
-;;     Update #: 1050
+;; Last-Updated: 2023-06-07 13:31:04(+0800) [by Fred Qi]
+;;     Update #: 1089
 ;; ----------------------------------------------------------------------
 ;;
 ;;
@@ -31,10 +31,61 @@
 ;; 
 ;; ----------------------------------------------------------------------
 
-
 ;; ----------------------------------------------------------------------
 ;; Load required packages 
 ;; ----------------------------------------------------------------------
+
+;; ----------------------------------------------------------------------
+;; Setting up Chinese language / GBK enviroment
+;; ----------------------------------------------------------------------
+(require 'cnfonts)
+(setq cnfonts-profiles '("fred"))
+(setq cnfonts-default-fontsize 20.0)
+(setq cnfonts-use-face-font-rescale t)
+(cnfonts-mode 1)
+
+;; (if (>= emacs-major-version 23)
+;;     (progn 
+;;       (if (or linux-p darwin-p)
+;; 		  (set-language-environment 'utf-8))
+;; 	  (if winnt-p
+;; 		  (progn
+;; 			(set-language-environment 'chinese-gbk)
+;; 			(setq w32-charset-info-alist
+;; 				  (cons '("gbk" w32-charset-gb2312 . 936) 
+;; 						w32-charset-info-alist))))
+;;       ;; create fontsets from specification strings
+;;       (create-fontset-from-fontset-spec local-font-eng)
+;;       (create-fontset-from-fontset-spec local-font-eng-bold)
+;;       (create-fontset-from-fontset-spec local-font-eng-italic)
+;;       (create-fontset-from-fontset-spec local-font-eng-bold-italic)
+;;       ;; set fonts in corresponding fontsets
+;;       (set-fontset-font "fontset-default" nil local-font-chn nil 'prepend)
+;;       (set-fontset-font "fontset-gbk" 'kana local-font-chn nil 'prepend)
+;;       (set-fontset-font "fontset-gbk" 'han local-font-chn nil 'prepend)
+;;       (set-fontset-font "fontset-gbk" 'cjk-misc local-font-chn nil 'prepend)
+;;       (set-fontset-font "fontset-gbk" 'symbol local-font-chn nil 'prepend)
+;;       ;; select fontsets for displaying specific face/style font
+;;       (set-frame-font "fontset-gbk")
+;; 	  (setq default-frame-alist
+;; 	  		(append '((font . "fontset-gbk")) default-frame-alist))
+;; 	  (set-face-font 'bold "fontset-gbkbold")
+;; 	  (set-face-font 'italic "fontset-gbkitalic")
+;; 	  (set-face-font 'bold-italic "fontset-gbkboldit")))
+
+;; (if linux-p
+;; 	(progn
+;; 	  (register-input-method "chinese-wubi"
+;; 							 local-encoding
+;; 							 'quail-use-package
+;; 							 "WuBi" "WuBi" "wubi")
+;; 	  (setq default-input-method "chinese-wubi")))
+
+;; ;; setup the emacs window size
+;; ;; (if (not 'system-user-terminfo)
+;; (progn 
+;;   (set-frame-height (selected-frame) local-screen-height)
+;;   (set-frame-width (selected-frame) local-screen-width))
 
 ;; included in GNU EMACS(v23)
 (require 'ido)          ; Interactively do things with buffers and files.
@@ -44,21 +95,6 @@
 
 (require 'htmlize)      ; Convert buffer text and decorations to HTML.
 (require 'header2)      ; Support for creation and update of file headers.
-;; (require 'psvn)         ; Subversion interface.
-
-;; Load the major mode for plain text editing
-;; (add-to-list 'auto-mode-alist '("\\.txt$"  . text-mode))
-
-;; ;; Load the major mode for editing sgml files.
-;; (require 'sgml-mode)
-;; ;; Load the major mode for editing CSS.
-;; (autoload 'css-mode "css-mode")
-;; ;; (add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
-
-;; ;; Load the major mode for editing dos command files.
-;; (autoload 'doscmd-mode "doscmd-mode")
-;; (add-to-list 'auto-mode-alist '("\\.bat$" . doscmd-mode))
-;; (add-to-list 'auto-mode-alist '("\\.cmd$" . doscmd-mode))
 
 (require 'use-package)
 
@@ -100,7 +136,6 @@
 ;; ----------------------------------------------------------------------
 ;; Custom the basic functionalities of EMACS
 ;; ----------------------------------------------------------------------
-
 (setq display-time-24hr-format t)		; set time format shown in mode-line
 (setq frame-title-format "%n%b")		; show buffer name in the title bar
 (setq inhibit-splash-screen t)			; no startup message
@@ -144,7 +179,7 @@
 (setq auto-save-list-file-prefix "~/.emacs.d/autosaves/")
 
 ;; Setup the desktop save mode
-(setq desktop-path '("" "~/.emacs.d"))
+;; (setq desktop-path '("" "~/.emacs.d"))
 (setq desktop-base-file-name ".desktop.el")
 (setq desktop-save t)
 (desktop-save-mode t)					; save desktop
@@ -194,52 +229,6 @@
 	(setq x-select-enable-clipboard t))
 
 ;; ----------------------------------------------------------------------
-;; Setting up Chinese language / GBK enviroment
-;; ----------------------------------------------------------------------
-(if (>= emacs-major-version 23)
-    (progn 
-      (if (or linux-p darwin-p)
-		  (set-language-environment 'utf-8))
-	  (if winnt-p
-		  (progn
-			(set-language-environment 'chinese-gbk)
-			(setq w32-charset-info-alist
-				  (cons '("gbk" w32-charset-gb2312 . 936) 
-						w32-charset-info-alist))))
-      ;; create fontsets from specification strings
-      (create-fontset-from-fontset-spec local-font-eng)
-      (create-fontset-from-fontset-spec local-font-eng-bold)
-      (create-fontset-from-fontset-spec local-font-eng-italic)
-      (create-fontset-from-fontset-spec local-font-eng-bold-italic)
-      ;; set fonts in corresponding fontsets
-      (set-fontset-font "fontset-default" nil local-font-chn nil 'prepend)
-      (set-fontset-font "fontset-gbk" 'kana local-font-chn nil 'prepend)
-      (set-fontset-font "fontset-gbk" 'han local-font-chn nil 'prepend)
-      (set-fontset-font "fontset-gbk" 'cjk-misc local-font-chn nil 'prepend)
-      (set-fontset-font "fontset-gbk" 'symbol local-font-chn nil 'prepend)
-      ;; select fontsets for displaying specific face/style font
-      (set-frame-font "fontset-gbk")
-	  (setq default-frame-alist
-	  		(append '((font . "fontset-gbk")) default-frame-alist))
-	  (set-face-font 'bold "fontset-gbkbold")
-	  (set-face-font 'italic "fontset-gbkitalic")
-	  (set-face-font 'bold-italic "fontset-gbkboldit")))
-
-(if linux-p
-	(progn
-	  (register-input-method "chinese-wubi"
-							 local-encoding
-							 'quail-use-package
-							 "WuBi" "WuBi" "wubi")
-	  (setq default-input-method "chinese-wubi")))
-
-;; setup the emacs window size
-(if (not 'system-user-terminfo)
-	(progn 
-	  (set-screen-height local-screen-height)
-	  (set-screen-width local-screen-width)))
-
-;; ----------------------------------------------------------------------
 ;; SETTING LOADED PACKAGES
 ;; ----------------------------------------------------------------------
 
@@ -260,6 +249,12 @@
 (setq vc-handled-backends '(svn git))
 (setq svn-status-hide-unknown t)
 (setq svn-status-hide-unmodified t)
+
+(use-package magithub
+  :after magit
+  :config
+  (magithub-feature-autoinject t)
+  (setq magithub-clone-default-directory "~/projects"))
 
 (setq header-date-format "%Y-%m-%d %T(%z)")
 ;; (setq header-copyright-notice "Copyright (C) 2008, all rights reserved.\n")

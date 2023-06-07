@@ -9,8 +9,8 @@
 ;; ----------------------------------------------------------------------
 ;;; CHANGE LOG
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2022-01-19 18:48:37(+0800) [by Fred Qi]
-;;     Update #: 298
+;; Last-Updated: 2023-06-07 13:34:48(+0800) [by Fred Qi]
+;;     Update #: 301
 ;; ----------------------------------------------------------------------
 ;;; COMMENTARY
 ;; ----------------------------------------------------------------------
@@ -59,13 +59,13 @@
     (add-hook hook #'fred-latex-hook)))
 
 (autoload 'bst-mode "bst-mode" "BibTeX-style major mode." t)
-(autoload 'asy-mode "asy-mode.el" "Asymptote major mode." t)
-(autoload 'lasy-mode "asy-mode.el" "hybrid Asymptote/Latex major mode." t)
-(autoload 'asy-insinuate-latex "asy-mode.el" "Asymptote insinuate LaTeX." t)
-(add-to-list 'auto-mode-alist '("\\.asy$" . asy-mode))
-(add-hook 'asy-mode-hook
-	  (lambda ()
-	    (c-set-style "standard")))
+;; (autoload 'asy-mode "asy-mode.el" "Asymptote major mode." t)
+;; (autoload 'lasy-mode "asy-mode.el" "hybrid Asymptote/Latex major mode." t)
+;; (autoload 'asy-insinuate-latex "asy-mode.el" "Asymptote insinuate LaTeX." t)
+;; (add-to-list 'auto-mode-alist '("\\.asy$" . asy-mode))
+;; (add-hook 'asy-mode-hook
+;; 	  (lambda ()
+;; 	    (c-set-style "standard")))
 
 ;; ;; preview-latex settings
 ;; (setq preview-image-type 'pnm)
@@ -76,9 +76,6 @@
 ;; (setq reftex-bibliography-commands
 ;; 	  '("bibliography" "nobibliography"
 ;; 		"addbibresource" "addglobalbib" "addsectionbib"))
-
-;; (require 'zotelo)
-;; (add-hook 'TeX-mode-hook 'zotelo-minor-mode)
 
 ;; SyncTeX support with Evince
 (use-package dbus)
@@ -121,8 +118,8 @@
 	  (set-syntax-table ost))))))
 (define-key esc-map "=" 'sds-word-count) ; was count-line-region
 
-(setq asy-command-location local-asymptote-path)
-(add-hook 'asy-mode-hook 'fred-auto-header-hook)
+;; (setq asy-command-location local-asymptote-path)
+;; (add-hook 'asy-mode-hook 'fred-auto-header-hook)
 
 ;; ----------------------------------------------------------------------
 ;;; END OF FILE 

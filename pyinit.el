@@ -9,49 +9,28 @@
 ;; ----------------------------------------------------------------------
 ;;; CHANGE LOG
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2022-10-24 18:41:07(+0800) [by Fred Qi]
-;;     Update #: 57
+;; Last-Updated: 2023-06-07 13:42:30(+0800) [by Fred Qi]
+;;     Update #: 76
 ;; ----------------------------------------------------------------------
 
-;; (require 'python)
+;;; Code:
 (require 'cython-mode)
 (require 'django-mode)
-
-; (elpy-enable)
-;; (elpy-use-ipython)
-;; (setq elpy-rpc-backend "jedi")
-(setq flymake-log-level 3)
-;; (elpy-clean-modeline)
 
 ;; Make SConstruct files be editted in python mode
 (add-to-list 'auto-mode-alist '("SConstruct\\'" . python-mode))
 
-(setq python-indent-offset 4)
-
-(defun fred-python-mode-hook ()
-  "Fred's hook for python mode"
-  (setq comment-start "# ")
-  (setq python-python-command "python")
-  (setq python-command python-python-command)
-  (fred-auto-header-hook))
-  ;; (require 'sphinx-doc)
-  ;; (sphinx-doc-mode t))
-
-(setq python-python-command local-python-path)
-
-(add-hook 'python-mode-hook 'fred-python-mode-hook)
-
-(setq conda-anaconda-home "/opt/conda")
-(require 'conda)
-
-;; (require 'ein)
+(add-hook 'python-mode-hook
+	  (lambda ()
+	    (setq comment-start "# "
+		  python-indent-offset 4)
+	    (anaconda-mode)
+	    (fred-auto-header-hook)
+	    (require 'sphinx-doc)
+	    (sphinx-doc-mode t)))
 
 (use-package yaml-mode
   :mode ("\\.ya?ml\\'" . yaml-mode))
 
-;; (require 'android-mode)
-;; (setq android-mode-sdk-dir "~/android/sdk")
-
-;; ----------------------------------------------------------------------
-;;; END OF FILE 
-;; ----------------------------------------------------------------------
+(provide 'pyinit)
+;;; pyinit.el ends here
