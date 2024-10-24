@@ -12,8 +12,8 @@
 ;;    Move the ess package to mathinit.el.
 ;;    Setting user-full-name with respect to machine and OS platform.
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2023-06-07 13:31:04(+0800) [by Fred Qi]
-;;     Update #: 1089
+;; Last-Updated: 2023-08-05 18:52:24(+0800) [by Fred Qi]
+;;     Update #: 1112
 ;; ----------------------------------------------------------------------
 ;;
 ;;
@@ -38,6 +38,8 @@
 ;; ----------------------------------------------------------------------
 ;; Setting up Chinese language / GBK enviroment
 ;; ----------------------------------------------------------------------
+
+;;; Code:
 (require 'cnfonts)
 (setq cnfonts-profiles '("fred"))
 (setq cnfonts-default-fontsize 20.0)
@@ -80,12 +82,6 @@
 ;; 							 'quail-use-package
 ;; 							 "WuBi" "WuBi" "wubi")
 ;; 	  (setq default-input-method "chinese-wubi")))
-
-;; ;; setup the emacs window size
-;; ;; (if (not 'system-user-terminfo)
-;; (progn 
-;;   (set-frame-height (selected-frame) local-screen-height)
-;;   (set-frame-width (selected-frame) local-screen-width))
 
 ;; included in GNU EMACS(v23)
 (require 'ido)          ; Interactively do things with buffers and files.
@@ -250,11 +246,11 @@
 (setq svn-status-hide-unknown t)
 (setq svn-status-hide-unmodified t)
 
-(use-package magithub
-  :after magit
-  :config
-  (magithub-feature-autoinject t)
-  (setq magithub-clone-default-directory "~/projects"))
+;; (use-package magithub
+;;   :after magit
+;;   :config
+;;   (magithub-feature-autoinject t)
+;;   (setq magithub-clone-default-directory "~/projects"))
 
 (setq header-date-format "%Y-%m-%d %T(%z)")
 ;; (setq header-copyright-notice "Copyright (C) 2008, all rights reserved.\n")
@@ -380,6 +376,9 @@
   ("\\.markdown\\'" . markdown-mode)
   ("\\.md\\'" . markdown-mode)
   ("README\\.md$" . gfm-mode))
+
+;; (pdf-tools-install)  ; Standard activation command
+;; (pdf-loader-install) ; On demand loading, leads to faster startup time
 
 ;; ----------------------------------------------------------------------
 ;; MY PREFERRED KEY BINDINGS

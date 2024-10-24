@@ -12,8 +12,8 @@
 ;; 2006-03-23 23:06:51(+0800)    Fred Qi@mobile  
 ;;    Added the local settings for laptop, lab, and dorm of Windows NT.
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2023-06-07 13:48:56(+0800) [by Fred Qi]
-;;     Update #: 583
+;; Last-Updated: 2024-10-24 19:47:21(+0800) [by Fred Qi]
+;;     Update #: 638
 ;; ----------------------------------------------------------------------
 
 ;;; Code:
@@ -87,7 +87,7 @@
    (winnt-p "C:/Python25/python.exe"))
   "The directory python installed to.")
 
-(defconst local-screen-height 48
+(defconst local-screen-height 60
   "Number of rows of the Emacs frame window.")
 (defconst local-screen-width 120
   "Number of column of the Emacs frame window.")
@@ -149,6 +149,11 @@
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
+
+;; (add-to-list 'default-frame-alist '(height . local-screen-height))
+;; (add-to-list 'default-frame-alist '(width . local-screen-width))
+(add-to-list 'initial-frame-alist '(height . local-screen-height))
+(add-to-list 'initial-frame-alist '(width . local-screen-width))
 
 (load "install.el" nil t t)     ;; install packages
 (load "emacsinit.el" nil t t)	;; emacs miscellaneous settings
