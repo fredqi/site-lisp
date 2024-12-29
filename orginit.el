@@ -13,8 +13,8 @@
 ;;  - https://jamiecollinson.com/blog/my-emacs-config/
 ;;  - https://ianyepan.github.io/posts/setting-up-use-package/
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2024-10-24 11:54:58(+0800) [by Fred Qi]
-;;     Update #: 1163
+;; Last-Updated: 2024-12-09 10:18:08(+0800) [by Fred Qi]
+;;     Update #: 1169
 ;; ----------------------------------------------------------------------
 
 ;;; Code:
@@ -26,7 +26,14 @@
 (require 'ox-hugo)
 (require 'oc-csl)
 
-(eval-after-load "org"
+;; ;; Option 1: Per buffer
+;; (add-hook 'org-mode-hook #'org-modern-mode)
+;; (add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
+
+;; ;; Option 2: Globally
+;; (with-eval-after-load 'org (global-org-modern-mode))
+
+(eval-after-load 'org
   (progn
     (org-babel-do-load-languages
      'org-babel-load-languages
@@ -44,6 +51,7 @@
 	  '((daily today require-timed)
 	    (830 1130 1245 1545 1845)
 	    "......" "----------------"))
+    (global-org-modern-mode)
     ;; (conda-env-activate "base")
     ;; (setq org-babel-python-command "python3")
     (setq org-cite-csl-styles-dir "~/cloud/zotero/styles")))

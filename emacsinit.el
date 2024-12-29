@@ -12,8 +12,8 @@
 ;;    Move the ess package to mathinit.el.
 ;;    Setting user-full-name with respect to machine and OS platform.
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2023-08-05 18:52:24(+0800) [by Fred Qi]
-;;     Update #: 1112
+;; Last-Updated: 2024-10-31 11:37:10(+0800) [by Fred Qi]
+;;     Update #: 1113
 ;; ----------------------------------------------------------------------
 ;;
 ;;
@@ -42,7 +42,7 @@
 ;;; Code:
 (require 'cnfonts)
 (setq cnfonts-profiles '("fred"))
-(setq cnfonts-default-fontsize 20.0)
+(setq cnfonts-default-fontsize 16.0)
 (setq cnfonts-use-face-font-rescale t)
 (cnfonts-mode 1)
 
