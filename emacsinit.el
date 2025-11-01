@@ -12,8 +12,8 @@
 ;;    Move the ess package to mathinit.el.
 ;;    Setting user-full-name with respect to machine and OS platform.
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2024-10-31 11:37:10(+0800) [by Fred Qi]
-;;     Update #: 1113
+;; Last-Updated: 2025-11-01 13:49:06(+0800) [by Fred Qi]
+;;     Update #: 1116
 ;; ----------------------------------------------------------------------
 ;;
 ;;
@@ -147,23 +147,26 @@
 (if (fboundp 'scroll-bar-mode)
 	(scroll-bar-mode -1))				; hide the scroll bar
 
-(setq color-theme-libraries 
-	  '("color-theme-library.el"))
-(require 'color-theme)
-(color-theme-initialize)				; load the color theme
+(require 'color-theme-modern)		; load the color theme modern
 
 (defvar fred-theme-list
-  '((color-theme-dark-laptop)
-	(color-theme-arjen)
-	(color-theme-sitaramv-nt)
-	(color-theme-jb-simple)
-	(color-theme-billw)))
+  '(aalto-dark arjen billw dark-laptop jb-simple sitaramv-nt)
+  "List of modern color theme names (symbols).")
 
-(funcall
- (car (nth 
-       (mod (random t) 
-			(length fred-theme-list))
-       fred-theme-list)))
+(defun fred/load-random-color-theme ()
+  "Randomly select and load a theme from `fred-theme-list`."
+  (interactive)
+  (random t)  ;; seed RNG with current time
+  (let* ((theme (nth (random (length fred-theme-list)) fred-theme-list)))
+    ;; disable any previously enabled themes
+    (mapc #'disable-theme custom-enabled-themes)
+    ;; load and enable the new one
+    (load-theme theme t t)
+    (enable-theme theme)
+    (message "Loaded random theme: %s" theme)))
+
+;; Load one theme immediately
+(fred/load-random-color-theme)
 
 ;; Backup policies 
 (setq make-backup-files t) 
