@@ -13,8 +13,8 @@
 ;;  - https://jamiecollinson.com/blog/my-emacs-config/
 ;;  - https://ianyepan.github.io/posts/setting-up-use-package/
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2024-12-09 10:18:08(+0800) [by Fred Qi]
-;;     Update #: 1169
+;; Last-Updated: 2025-11-01 13:26:58(+0800) [by Fred Qi]
+;;     Update #: 1172
 ;; ----------------------------------------------------------------------
 
 ;;; Code:
@@ -51,16 +51,11 @@
 	  '((daily today require-timed)
 	    (830 1130 1245 1545 1845)
 	    "......" "----------------"))
-    (global-org-modern-mode)
-    ;; (conda-env-activate "base")
-    ;; (setq org-babel-python-command "python3")
     (setq org-cite-csl-styles-dir "~/cloud/zotero/styles")))
 
 ;; (setq todoist-token "7999636165f29b30242db38de5c65c8c8978c691"
 ;;       todoist-backing-buffer "todoist.org"
 ;;       todoist-show-all t)
-
-(require 'org-arbeitszeit)
 
 (with-eval-after-load 'ox-hugo
   (plist-put org-hugo-citations-plist :bibliography-section-heading "References"))
