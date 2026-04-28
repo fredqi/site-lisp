@@ -12,8 +12,8 @@
 ;; 2006-04-24 00:05:24(+0800)    Fred Qi@lab
 ;;    Added a elisp function to recursively generating etags.
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2023-06-07 12:09:46(+0800) [by Fred Qi]
-;;     Update #: 582
+;; Last-Updated: 2026-04-28 16:00:30(+0800) [by Fred Qi]
+;;     Update #: 583
 ;; ----------------------------------------------------------------------
 
 ;; ----------------------------------------------------------------------
@@ -45,6 +45,7 @@
   :custom
   (flycheck-emacs-lisp-initialize-packages t)
   (flycheck-display-errors-delay 0.1)
+  (flycheck-disabled-checkers '(org-lint))  
   :config
   (global-flycheck-mode)
   (flycheck-set-indication-mode 'left-margin)

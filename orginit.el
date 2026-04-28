@@ -13,8 +13,8 @@
 ;;  - https://jamiecollinson.com/blog/my-emacs-config/
 ;;  - https://ianyepan.github.io/posts/setting-up-use-package/
 ;; ----------------------------------------------------------------------
-;; Last-Updated: 2025-11-01 13:26:58(+0800) [by Fred Qi]
-;;     Update #: 1172
+;; Last-Updated: 2026-04-28 16:07:54(+0800) [by Fred Qi]
+;;     Update #: 1174
 ;; ----------------------------------------------------------------------
 
 ;;; Code:
@@ -95,8 +95,8 @@
 	;; ("APPROVED" :foreground "forest green" :weight bold)
 	("REFR" :foreground "magenta" :weight bold)
 	("DELEG" :foreground "cyan" :weight bold)
- 	("CANCELLED" :foreground "forest green" :weight bold)
-	("EXPIRED" :foreground "forest green" :weight bold)
+ 	("CANCELLED" :foreground "orange" :weight bold)
+	("EXPIRED" :foreground "orange" :weight bold)
 	("REJECTED" :foreground "forest green" :weight bold)))
  
 (setq org-todo-state-tags-triggers
@@ -131,7 +131,7 @@
 	("n" "Note" entry (file+headline "notes.org" "Notes")
 	 "* %^{Description} :note:\n%?" :jump-to-captured t)))
 
-(setq org-directory "~/cloud/OneDrive/personal/pim/orgs"
+(setq org-directory "~/cloud/onedrive/personal/pim/orgs"
       org-default-notes-file (concat org-directory "/notes.org")
       org-archive-location "archive.org::")
 (setq org-agenda-files
